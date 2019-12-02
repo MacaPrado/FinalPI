@@ -1,18 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>	//ES NECESARIA???
-#include <string.h>	
+#include <string.h>
 #include "bornADT.h"
 
-typedef struct Fecha{		//Estructura con año y sexo del nacido
+typedef struct nodeFecha{		//Estructura con año y sexo del nacido
+    struct nodeFecha *next;       //ORDENARLO POR FECHAS
     size_t year;
-    char * sexo;
-    size_t code;
+    size_t varon;
+    size_t mujer;
 }Fecha;
 
 
 typedef struct nodeProv{        //Nodo de provincia con cantidad de nacidos
-    struct nodeProv *next;
+    struct nodeProv *next;            //ORDENARLO ALFABETICAMENTE
     char * provincia;
     size_t nacidos;
     size_t cod;
@@ -20,14 +21,18 @@ typedef struct nodeProv{        //Nodo de provincia con cantidad de nacidos
 
 //Lista con un puntero hacia el nodo de privincia
 //y un puntero hacia una estructura con los datos del sexo y año, no se si realizar otro nodo para esto
-//esta parte me recuerda al ejerccio de calendario y quiza por eso lo estoy tomando asi, si vemos una mejor forma lo podemos cambiar, 
+//esta parte me recuerda al ejerccio de calendario y quiza por eso lo estoy tomando asi, si vemos una mejor forma lo podemos cambiar,
 //la forma de comparar quiza sea distinto, no recuerdo bien
-struct nacidosCDT{              
-    size_t Total;
+struct provinciasCDT{
+    size_t totalNacidos;
     struct nodeProv * first;
     struct nodeProv * current;
-    Fecha * nacimiento;
-};								
+};
+
+struct fechasCDT{
+  struct nodeFecha * first;
+  struct nodeFecha * current;
+}
 
 static int compare(char c1, char c2){
     return c1-c2;
@@ -50,6 +55,7 @@ int hasNext(bornADT b){
 }
 
 void add(, ){
-   
-    
+
+
 }
+
