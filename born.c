@@ -6,7 +6,7 @@
 
 int main(int argc, char **argv){
 
-	if(argc != 3){ //me aseguro de recibir los archivos en la línea de comandos, el primer argumento siempre es el programa en si. 
+	if(argc != 3){ //me aseguro de recibir los archivos en la línea de comandos, el primer argumento siempre es el programa en si.
 		printf("ERROR: Incorrect number of parameters. Files nacimientos.csv and provincias.csv are expected as parameters.\n"); //FUNCIONA CON FSANITIZE
 		return 1;
 	}
@@ -50,10 +50,10 @@ void query1(char *provinces[],long int bornByProvince[], const int dim){ //DONDE
 
 //______________________________________IDEA DE query2       NO LO PROBE CON FSANITIZE, ES UNA IDEA
 
-void query2(int *year, int *male, int *female, const int years){ 
+void query2(int *year, int *male, int *female, const int years){
     FILE *fp;
-    fp=fopen("query2.csv", "w");				
-    fprintf(fp, "Año;Varón;Mujer\n");	
+    fp=fopen("query2.csv", "w");
+    fprintf(fp, "Año;Varón;Mujer\n");
     for(int i=0; i<years; i++){
         fprintf(fp, "%d;%ld;%ld\n", year[i],male[i],female[i]);
     }
@@ -65,7 +65,7 @@ void query2(int *year, int *male, int *female, const int years){
 
 void query3(char *provinces[],int percentage[], const int dim){		//TENDRIAMOS QUE PONERLE CONST A ESTOS VECTORES EN CADA QUERY?
     FILE *fp;
-    fp=fopen("query3.csv", "w"); 
+    fp=fopen("query3.csv", "w");
     fprintf(fp, "Provincia;Porcentaje\n");
     for(int i=0; i<dim; i++){
         fprintf(fp, "%s;%ld%%\n", provinces[i],percentage[i]);
