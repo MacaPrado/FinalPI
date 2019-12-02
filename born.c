@@ -4,6 +4,8 @@
 #include "bornADT.h"
 
 
+//HOLA MEL
+
 int main(int argc, char **argv){
 
 	if(argc != 3){ //me aseguro de recibir los archivos en la línea de comandos, el primer argumento siempre es el programa en si. 
