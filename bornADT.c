@@ -4,29 +4,29 @@
 #include <string.h>
 #include "bornADT.h"
 
-typedef struct nodeFecha{		//Estructura con año y sexo del nacido
-    struct fechaNode next;       //ORDENARLO POR FECHAS
+typedef struct nodeDate{		//Estructura con año y sexo del nacido
+    struct dateNode next;       //ORDENARLO POR FECHAS
     size_t year;
-    size_t varon;
-    size_t mujer;
+    size_t men;
+    size_t women;
 }Fecha;
 
 
 typedef struct nodeProv{        //Nodo de provincia con cantidad de nacidos
     provNode next;            //ORDENARLO ALFABETICAMENTE
-    char * provincia;
-    size_t nacidos;
-    size_t codigo;
+    char * province;
+    size_t borns;
+    size_t code;
 } nodeProv;
 
 //Lista con un puntero hacia el nodo de provincia
 //y un puntero hacia un nodo de fechas
 struct bornCDT{
-    size_t totalNacidos;
-    provNode first;
-    provNode current;
-    fechaNode first;
-    fechaNode current;
+    size_t totalBorns;
+    provNode firstProvince;
+    provNode currentProvince;
+    dateNode firstDate;
+    dateNode currentDate;
 };
 
 static int compare(char c1, char c2){
