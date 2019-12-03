@@ -1,20 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>	//ES NECESARIA???
+#include <math.h>	
 #include <string.h>
 #include "bornADT.h"
 
-typedef struct nodeDate{		//Estructura con año y sexo del nacido
+typedef struct nodeDate{        //Estructura con año y sexo del nacido
     dateNode next;       //ORDENARLO POR FECHAS
     size_t year;
     size_t men;
     size_t women;
-}Fecha;
+} nodeDate;
 
 
 typedef struct nodeProv{        //Nodo de provincia con cantidad de nacidos
     provNode next;            //ORDENARLO ALFABETICAMENTE
-    char * name;//CAMBIE ESTO PORQUE CUANDO INTENTE HACER EL ADD ME CONFUNDIA MUCHO
+    char * name;
     size_t borns;
     size_t code;
 } nodeProv;
@@ -22,19 +22,51 @@ typedef struct nodeProv{        //Nodo de provincia con cantidad de nacidos
 //Lista con un puntero hacia el nodo de provincia
 //y un puntero hacia un nodo de fechas
 struct bornCDT{
-    size_t totalBorns;
+    size_t AllBorns;
     provNode firstProvince;
     provNode currentProvince;
     dateNode firstDate;
     dateNode currentDate;
 };
-
 static int compare(char c1, char c2){
     return c1-c2;
-}
+
+static void freeProvince(provNode b);
+static void freeDate(dateNode b);
+
 
 bornADT new(void){
-    return calloc(1, sizeof(struct bornCDT));
+    bornADT new= calloc(1, sizeof(struct bornCDT));
+    return new;
+}
+
+void 
+freeBorn(bornADT b){
+    if (b==NULL) {
+        return;
+    }
+    freeProvince(b->firstProvince);
+    freeDate(b->firstDate);
+    free(b);
+}
+
+static void
+freeProvince(provNode b){
+    if (b==NULL) {
+        return;
+    }
+    freeProvince(b->next);
+    free(b->name);
+    free(b);
+}
+
+static void
+freeDate(dateNode b){
+    if (b==NULL) {
+        return;
+    }
+    freeDate(b->next);
+    free(b);
 }
 
 int isEmpty(const bornADT b){
@@ -49,67 +81,21 @@ int hasNext(bornADT b){
     return b->current != NULL;
 }
 
-
-///ACA EMPIEZA LA FORMA QUE HIZO MIKE Y CAMI ///////
-
-void
-processProvinceData(FILE * province_data, bornADT born){
-    char fmt[]="%d,%[^,]";
-    int code;
-    char povince[MAX_LENGTH]
-    while(fgetc(province_data)!='\n');
-    while (fscanf(province_data, fmt, &code, province) == 2){
-        addData(subway, province, code);
-    }
-    fclose(lines_data);
+void add(bornADT born, provNode Province){
+    born->firstProvince= addProvince(born->firstProvince, Province);
+    born->AllBorns++;
 }
 
-void 
-processBornsData(FILE * borns_data, bornADT born){
-    char fmt[]="%d/%d/%d,%d,%[^,],%[^,],%[^,], %d";
-    int year, provinceCode, parto, sex, cuenta;//QUE MIERDA ES CUENTA
-    char rango[MAX_LENGTH];
-    char study[MAX_LENGTH];
-    char peso[MAX_LENGTH];
+provNode addProvince(provNode b, char Province[MAX_LENGTH], int code){
+    int c;
 
-    while(fgetc(borns_data)!='\n');
-    while (fscanf(borns_data, fmt, &year, &provinceCode, &parto, &sex, rango, study, peso, &cuenta) == 8) {
-        addDate(born, year, sex);
-    }
-    fclose(turnstiles_data);
-}
-
-///ACA TERMINA ///////
-
-void readData(FILE * f, bornADT b){
-  char buf[BLOQUE2]; //defino un vector de chars para poder usar en fgets
-    int cont=0;
-    int numCampo;
-    int year, sex;
-    long int persons;
-
-    while(fgets(buf, BLOQUE2, f)){
-        numCampo=0;
-        cont++;
-
-        if(cont==1)
-            continue; //me salteo el header
-        char * campo = strtok(buf, ","); //empiezo a recorrer la linea del CSV
-        while(campo){
-
-            if(numCampo == 0){
-                sscanf(campo, "%d", &year); 
-            }
-
-            if(numCampo == 3){ //uso el campo de "hasta" para corroborar si el pasajero es diurno o nocturno
-                sscanf(campo, "%d", &sex); //guardo la hora, descarto los minutos
-            }
-
-            campo = strtok(NULL, ","); //avanzo de campo
-            numCampo++;
-        }
-      
-        //addYears(b, year, sex, persons);
+    if(b == NULL || b->code < code){
+        provNode new= malloc(sizeof(struct nodeProv));
+        new->code = code;
+        new->name = malloc(sizeof(char));
+        strcpy(new->name, province);
+        new->next=
     }
 }
+ 
 
