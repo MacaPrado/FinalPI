@@ -36,6 +36,42 @@ int main(int argc, char **argv){
 	return 0;
 }
 
+void processProvinceData(FILE * province_data, bornADT b){
+    char buf[BLOQUE2]; //defino un vector de chars para poder usar en fgets
+    int cont=0;
+    int numCampo;
+    int code;
+    char province[MAX_LENGHT]
+
+    while(fgets(buf, BLOQUE2, province_data)){
+        numCampo=0;
+        cont++;
+
+        if(cont==1)
+            continue; //me salteo el header
+        char * campo = strtok(buf, ","); //empiezo a recorrer la linea del CSV
+        while(campo){
+
+            if(numCampo == 0){
+                sscanf(campo, "%d", &code);//guardo el codigo
+            }
+
+            if(numCampo == 1){ 
+                province=malloc(sizeof(char)); 
+                strcpy(nombre, campo);
+                len=strlen(nombre);
+            }
+
+            campo = strtok(NULL, ","); //avanzo de campo
+            numCampo++;
+        }
+        printf("%d\n", cont );
+
+        addProvince(b, province, code);
+    }
+}
+
+
 //NO ESTOY SEGURA DE QUE EL ARMADO DE LOS QUERYS SE HAGA ACA, ¿¿ POR QUE LO HABIAMOS HECHO ASI EN LA ENTREGA ANTERIOR ??
 
 
