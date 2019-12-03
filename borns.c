@@ -16,7 +16,7 @@ int main(int argc, char **argv){
         return 1;
     }
 
-    bornADT born = new();//FUNCIONA CON FSANITIZE
+    bornADT born = new();
     FILE * f = fopen(argv[1], "r"); //abro el archivo de nacimientos que recibi como parametro con permisos de lectura
 
     if(f == NULL){
