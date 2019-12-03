@@ -14,7 +14,7 @@ typedef struct nodeDate{		//Estructura con año y sexo del nacido
 
 typedef struct nodeProv{        //Nodo de provincia con cantidad de nacidos
     provNode next;            //ORDENARLO ALFABETICAMENTE
-    char * province;
+    char * name;//CAMBIE ESTO PORQUE CUANDO INTENTE HACER EL ADD ME CONFUNDIA MUCHO
     size_t borns;
     size_t code;
 } nodeProv;
@@ -48,6 +48,38 @@ void toBegin(bornADT b){
 int hasNext(bornADT b){
     return b->current != NULL;
 }
+
+
+///ACA EMPIEZA LA FORMA QUE HIZO MIKE Y CAMI ///////
+
+void
+processProvinceData(FILE * province_data, bornADT born){
+    char fmt[]="%d,%[^,]";
+    int code;
+    char povince[MAX_LENGTH]
+    while(fgetc(province_data)!='\n');
+    while (fscanf(province_data, fmt, &code, province) == 2){
+        addData(subway, province, code);
+    }
+    fclose(lines_data);
+}
+
+void 
+processBornsData(FILE * borns_data, bornADT born){
+    char fmt[]="%d/%d/%d,%d,%[^,],%[^,],%[^,], %d";
+    int year, provinceCode, parto, sex, cuenta;//QUE MIERDA ES CUENTA
+    char rango[MAX_LENGTH];
+    char study[MAX_LENGTH];
+    char peso[MAX_LENGTH];
+
+    while(fgetc(borns_data)!='\n');
+    while (fscanf(borns_data, fmt, &year, &provinceCode, &parto, &sex, rango, study, peso, &cuenta) == 8) {
+        addDate(born, year, sex);
+    }
+    fclose(turnstiles_data);
+}
+
+///ACA TERMINA ///////
 
 void readData(FILE * f, bornADT b){
   char buf[BLOQUE2]; //defino un vector de chars para poder usar en fgets
