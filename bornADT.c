@@ -5,7 +5,7 @@
 #include "bornADT.h"
 
 typedef struct nodeDate{		//Estructura con año y sexo del nacido
-    struct dateNode next;       //ORDENARLO POR FECHAS
+    dateNode next;       //ORDENARLO POR FECHAS
     size_t year;
     size_t men;
     size_t women;
