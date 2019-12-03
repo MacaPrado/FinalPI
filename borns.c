@@ -67,9 +67,10 @@ void processProvinceData(FILE * province_data, bornADT b){
             campo = strtok(NULL, ","); //avanzo de campo
             numCampo++;
         }
-        printf("%d\n", cont);
         //addYears(b, year, sex, persons);
     }
+            printf("%d\n", cont);
+
 }
 
 void processBornsData(FILE * borns_data, bornADT b){
@@ -98,9 +99,10 @@ void processBornsData(FILE * borns_data, bornADT b){
             campo = strtok(NULL, ","); //avanzo de campo
             numCampo++;
         }
-        printf("%d\n", cont );
         //addYears(b, year, sex, persons);
     }
+            printf("%d\n", cont );
+
 }
 
 //NO ESTOY SEGURA DE QUE EL ARMADO DE LOS QUERYS SE HAGA ACA, ¿¿ POR QUE LO HABIAMOS HECHO ASI EN LA ENTREGA ANTERIOR ??
