@@ -70,7 +70,7 @@ freeDate(dateNode b){
 }
 
 int isEmpty(const bornADT b){
-    return b->size == 0;
+    return b->AllBorns == 0;
 }
 
 void toBegin(bornADT b){
