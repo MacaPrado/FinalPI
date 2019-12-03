@@ -4,6 +4,9 @@
 #include <string.h>
 #include "bornADT.h"
 
+#define MAX_LENGTH 20
+#define BLOQUE2 350
+
 typedef struct nodeDate{		//Estructura con año y sexo del nacido
     dateNode next;       //ORDENARLO POR FECHAS
     size_t year;
@@ -11,10 +14,9 @@ typedef struct nodeDate{		//Estructura con año y sexo del nacido
     size_t women;
 }Fecha;
 
-
 typedef struct nodeProv{        //Nodo de provincia con cantidad de nacidos
     provNode next;            //ORDENARLO ALFABETICAMENTE
-    char * name;//CAMBIE ESTO PORQUE CUANDO INTENTE HACER EL ADD ME CONFUNDIA MUCHO
+    char * province;
     size_t borns;
     size_t code;
 } nodeProv;
@@ -29,59 +31,58 @@ struct bornCDT{
     dateNode currentDate;
 };
 
-static int compare(char c1, char c2){
-    return c1-c2;
-}
+// static int compare(char c1, char c2){
+//     return c1-c2;
+// }
 
 bornADT new(void){
     return calloc(1, sizeof(struct bornCDT));
 }
 
-int isEmpty(const bornADT b){
-    return b->size == 0;
-}
+// int isEmpty(const bornADT b){
+//     return b->size == 0;
+// }
+//
+// void toBegin(bornADT b){
+//     b->current = b->first;
+// }
+//
+// int hasNext(bornADT b){
+//     return b->current != NULL;
+// }
 
-void toBegin(bornADT b){
-    b->current = b->first;
-}
+// void
+// processProvinceData(FILE * province_data, bornADT born){
+//     char fmt[]="%d,%[^,]";
+//     int code;
+//     char province[MAX_LENGTH];
+//     while(fgetc(province_data)!='\n');
+//     while (fscanf(province_data, fmt, &code, province) == 2){
+//         //addProvince(borns, province, code);
+//         printf("hola\n");
+//     }
+//     fclose(province_data);
+// }
 
-int hasNext(bornADT b){
-    return b->current != NULL;
-}
+
+// void
+// processBornsData(FILE * borns_data, bornADT born){
+//     char fmt[]="%d/%d/%d,%d,%[^,],%[^,],%[^,], %d";
+//     int year, provinceCode, parto, sex, cuenta;//QUE MIERDA ES CUENTA
+//     char rango[MAX_LENGTH];
+//     char study[MAX_LENGTH];
+//     char peso[MAX_LENGTH];
+//
+//     while(fgetc(borns_data)!='\n');
+//     while (fscanf(borns_data, fmt, &year, &provinceCode, &parto, &sex, rango, study, peso, cuenta) == 8) {
+//         addDate(born, year, sex);
+//     }
+//     fclose(borns_data);
+// }
 
 
-///ACA EMPIEZA LA FORMA QUE HIZO MIKE Y CAMI ///////
 
-void
-processProvinceData(FILE * province_data, bornADT born){
-    char fmt[]="%d,%[^,]";
-    int code;
-    char povince[MAX_LENGTH]
-    while(fgetc(province_data)!='\n');
-    while (fscanf(province_data, fmt, &code, province) == 2){
-        addData(subway, province, code);
-    }
-    fclose(lines_data);
-}
-
-void 
-processBornsData(FILE * borns_data, bornADT born){
-    char fmt[]="%d/%d/%d,%d,%[^,],%[^,],%[^,], %d";
-    int year, provinceCode, parto, sex, cuenta;//QUE MIERDA ES CUENTA
-    char rango[MAX_LENGTH];
-    char study[MAX_LENGTH];
-    char peso[MAX_LENGTH];
-
-    while(fgetc(borns_data)!='\n');
-    while (fscanf(borns_data, fmt, &year, &provinceCode, &parto, &sex, rango, study, peso, &cuenta) == 8) {
-        addDate(born, year, sex);
-    }
-    fclose(turnstiles_data);
-}
-
-///ACA TERMINA ///////
-
-void readData(FILE * f, bornADT b){
+void processProvinceData(FILE * f, bornADT b){
   char buf[BLOQUE2]; //defino un vector de chars para poder usar en fgets
     int cont=0;
     int numCampo;
@@ -98,7 +99,7 @@ void readData(FILE * f, bornADT b){
         while(campo){
 
             if(numCampo == 0){
-                sscanf(campo, "%d", &year); 
+                sscanf(campo, "%d", &year);
             }
 
             if(numCampo == 3){ //uso el campo de "hasta" para corroborar si el pasajero es diurno o nocturno
@@ -108,8 +109,7 @@ void readData(FILE * f, bornADT b){
             campo = strtok(NULL, ","); //avanzo de campo
             numCampo++;
         }
-      
+        printf("%d\n", cont );
         //addYears(b, year, sex, persons);
     }
 }
-
