@@ -21,7 +21,7 @@ typedef struct nodeProv{        //Nodo de provincia con cantidad de nacidos
 
 //Lista con un puntero hacia el nodo de provincia
 //y un puntero hacia un nodo de fechas
-struct provinciasCDT{
+struct bornCDT{
     size_t totalNacidos;
     struct nodeProv * first;
     struct nodeProv * current;
