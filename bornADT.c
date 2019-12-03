@@ -5,7 +5,7 @@
 #include "bornADT.h"
 
 typedef struct nodeFecha{		//Estructura con año y sexo del nacido
-    struct nodeFecha *next;       //ORDENARLO POR FECHAS
+    struct fechaNode next;       //ORDENARLO POR FECHAS
     size_t year;
     size_t varon;
     size_t mujer;
@@ -13,7 +13,7 @@ typedef struct nodeFecha{		//Estructura con año y sexo del nacido
 
 
 typedef struct nodeProv{        //Nodo de provincia con cantidad de nacidos
-    struct nodeProv *next;            //ORDENARLO ALFABETICAMENTE
+    struct provNode next;            //ORDENARLO ALFABETICAMENTE
     char * provincia;
     size_t nacidos;
     size_t cod;
@@ -23,10 +23,10 @@ typedef struct nodeProv{        //Nodo de provincia con cantidad de nacidos
 //y un puntero hacia un nodo de fechas
 struct bornCDT{
     size_t totalNacidos;
-    struct nodeProv * first;
-    struct nodeProv * current;
-    struct nodeFecha * first;
-    struct nodeFecha * current;
+    struct provNode first;
+    struct provNode current;
+    struct fechaNode first;
+    struct fechaNode current;
 };
 
 static int compare(char c1, char c2){
