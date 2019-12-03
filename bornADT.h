@@ -8,8 +8,11 @@ typedef struct nodeDate * dateNode;
 
 bornADT new(void);
 int isEmpty(const bornADT b);
+
 void toBegin(bornADT b);
+
 int hasNext(bornADT b);
-void add(ACA FALTA PARAMETRO, ACA FALTA PARAMETRO);
+
+void freeBorn(bornADT b);
 
 #endif
