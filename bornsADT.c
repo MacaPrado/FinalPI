@@ -113,3 +113,22 @@ void processProvinceData(FILE * f, bornADT b){
         //addYears(b, year, sex, persons);
     }
 }
+
+
+
+void add(bornADT born, provNode Province){
+    born->firstProvince= addProvince(born->firstProvince, Province);
+    born->AllBorns++;
+}
+
+provNode addProvince(provNode b, char Province[MAX_LENGTH], int code){
+    int c;
+
+    if(b == NULL || b->code < code){
+        provNode new= malloc(sizeof(struct nodeProv));
+        new->code = code;
+        new->name = malloc(sizeof(char));
+        strcpy(new->name, province);
+        new->next=
+    }
+}
