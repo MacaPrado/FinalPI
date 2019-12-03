@@ -13,20 +13,20 @@ typedef struct nodeFecha{		//Estructura con año y sexo del nacido
 
 
 typedef struct nodeProv{        //Nodo de provincia con cantidad de nacidos
-    struct provNode next;            //ORDENARLO ALFABETICAMENTE
+    provNode next;            //ORDENARLO ALFABETICAMENTE
     char * provincia;
     size_t nacidos;
-    size_t cod;
+    size_t codigo;
 } nodeProv;
 
 //Lista con un puntero hacia el nodo de provincia
 //y un puntero hacia un nodo de fechas
 struct bornCDT{
     size_t totalNacidos;
-    struct provNode first;
-    struct provNode current;
-    struct fechaNode first;
-    struct fechaNode current;
+    provNode first;
+    provNode current;
+    fechaNode first;
+    fechaNode current;
 };
 
 static int compare(char c1, char c2){
