@@ -1,8 +1,9 @@
 #ifndef BORNADT_H_
 #define BORNADT_H_
+
 typedef struct bornCDT * bornADT;		
 typedef struct nodeProv * provNode;
-typedef struct nodeFecha * fechaNode;
+typedef struct nodeDate * dateNode;
 
 
 bornADT new(void);
