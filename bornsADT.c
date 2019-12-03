@@ -35,10 +35,41 @@ struct bornCDT{
 //     return c1-c2;
 // }
 
+static void freeProvince(provNode b);
+static void freeDate(dateNode b);
+
 bornADT new(void){
     return calloc(1, sizeof(struct bornCDT));
 }
 
+void 
+freeBorn(bornADT b){
+    if (b==NULL) {
+        return;
+    }
+    freeProvince(b->firstProvince);
+    freeFechas(b->firstDate);
+    free(b);
+}
+
+static void
+freeProvince(provNode b){
+    if (b==NULL) {
+        return;
+    }
+    freeProvince(b->next);
+    free(b->name);
+    free(b);
+}
+
+static void
+freeDate(dateNode b){
+    if (b==NULL) {
+        return;
+    }
+    freeDate(b->next);
+    free(b);
+}
 // int isEmpty(const bornADT b){
 //     return b->size == 0;
 // }
