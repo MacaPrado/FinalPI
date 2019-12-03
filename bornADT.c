@@ -19,20 +19,15 @@ typedef struct nodeProv{        //Nodo de provincia con cantidad de nacidos
     size_t cod;
 } nodeProv;
 
-//Lista con un puntero hacia el nodo de privincia
-//y un puntero hacia una estructura con los datos del sexo y año, no se si realizar otro nodo para esto
-//esta parte me recuerda al ejerccio de calendario y quiza por eso lo estoy tomando asi, si vemos una mejor forma lo podemos cambiar,
-//la forma de comparar quiza sea distinto, no recuerdo bien
+//Lista con un puntero hacia el nodo de provincia
+//y un puntero hacia un nodo de fechas
 struct provinciasCDT{
     size_t totalNacidos;
     struct nodeProv * first;
     struct nodeProv * current;
+    struct nodeFecha * first;
+    struct nodeFecha * current;
 };
-
-struct fechasCDT{
-  struct nodeFecha * first;
-  struct nodeFecha * current;
-}
 
 static int compare(char c1, char c2){
     return c1-c2;
