@@ -81,7 +81,7 @@ int hasNext(bornADT b){
     return b->current != NULL;
 }
 
-void add(bornADT born, provNode Province){
+void addProvinces(bornADT born, provNode Province){
     born->firstProvince= addProvince(born->firstProvince, Province);
     born->AllBorns++;
 }
@@ -98,4 +98,50 @@ provNode addProvince(provNode b, char Province[MAX_LENGTH], int code){
     }
 }
  
+void addYears(bornADT born, int year, int sex){
+  dateNode aux = born->firstDate, previous = NULL;
+  int c;
+  if(aux == NULL){
+    nodeDate new = addYear(year, sex);
+    born->firstDate = new;
+    (born->size)++;
+  }
+  else{
+    while(aux != NULL){
+            if((c = compareInt(aux->year, year)) == 0){
+              if(sex == 1)
+                aux->men+=1;
 
+              if(sex == 2)
+                aux->women+=1;
+
+            }
+            else if(c > 0){ //los ordeno por año: si viene aca es pq c>0
+              dateNode new = addYear(sex, year);
+              previous->next = new;
+              new->next = aux;
+            }
+            else{
+              dateNode new = addYear(sex, year);
+              new->next = aux->next;
+              aux->next = new->next;
+            }
+            previous = aux;
+            aux= aux->next;
+    }
+
+  }
+}
+
+nodeDate addYear(int sex, int currentYear) {
+  dateNode new = malloc(sizeof(nodeDate));
+  new->year = currentYear;
+
+  if(sex == 1)
+    new->men=1;
+
+  if(sex == 2)
+    new -> women = 1;
+
+  return new;
+}
