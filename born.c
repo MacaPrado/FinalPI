@@ -72,7 +72,7 @@ void processProvinceData(FILE * province_data, bornADT b){
             numCampo++;
         }
         
-        //addYears(b, year, sex, persons);
+        //addYears(b, year, sex);
     }
     printf("%d\n", cont);
 }
@@ -104,7 +104,7 @@ void processBornsData(FILE * borns_data, bornADT b){
             numCampo++;
         }
         
-        //addYears(b, year, sex, persons);
+        addYears(b, year, sex);
     }
     printf("%d\n", cont );
 }
