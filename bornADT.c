@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>	
+#include <math.h>
 #include <string.h>
 #include "bornADT.h"
 
@@ -33,6 +33,8 @@ static int compare(char c1, char c2){
 
 static void freeProvince(provNode b);
 static void freeDate(dateNode b);
+static provNode addProvince(provNode b, char Province[MAX_LENGTH], int code);
+static nodeDate addYear(int sex, int currentYear);
 
 
 bornADT new(void){
@@ -40,7 +42,7 @@ bornADT new(void){
     return new;
 }
 
-void 
+void
 freeBorn(bornADT b){
     if (b==NULL) {
         return;
@@ -82,33 +84,33 @@ int hasNext(bornADT b){
 }
 
 void addProvinces(bornADT born, provNode Province){
-    born->firstProvince= addProvince(born->firstProvince, Province);
+    born->firstProvince= addProvince(born->firstProvince, Province); //ERROR: ADDPROVINCE RECIBE 3 PARAMETROS
     born->AllBorns++;
 }
 
-provNode addProvince(provNode b, char Province[MAX_LENGTH], int code){
+static provNode addProvince(provNode b, char Province[MAX_LENGTH], int code){
     int c;
 
-    if(b == NULL || b->code < code){
+    if(b == NULL || b->code < code){    //ERROR: QUEREMOS ORDENAR ALFABETICAMENTE, NO POR CODIGO
         provNode new= malloc(sizeof(struct nodeProv));
         new->code = code;
-        new->name = malloc(sizeof(char));
-        strcpy(new->name, province);
-        new->next=
+        new->name = malloc(sizeof(char)); //SIZE OF CHAR LE DARIA UN SOLO BYTE, NECESITAMOS QUE SEA DEL TAMANO DE NAME (EJ: CHAR * MAX_LENGHT O ALGO ASI Y DESPUES UN REALLOC)
+        strcpy(new->name, province); //ACA NO IRIA PROVINCE CON P MAYUSCULA?
+        new->next= //FALTA ESTO
     }
 }
- 
-void addYears(bornADT born, int year, int sex){
+
+void addYears(bornADT born, int year, int sex){     //NUNCA LE SUMAMOS UNO A BORNS EN PROVINCE
   dateNode aux = born->firstDate, previous = NULL;
   int c;
   if(aux == NULL){
     nodeDate new = addYear(year, sex);
     born->firstDate = new;
-    (born->size)++;
+    (born->size)++;   //BORN NO TIENE SIZE, SERIA ALLBORNS?
   }
   else{
     while(aux != NULL){
-            if((c = compareInt(aux->year, year)) == 0){
+            if((c = compareInt(aux->year, year)) == 0){   //NO EXISTE COMPARE INT
               if(sex == 1)
                 aux->men+=1;
 
@@ -116,7 +118,7 @@ void addYears(bornADT born, int year, int sex){
                 aux->women+=1;
 
             }
-            else if(c > 0){ //los ordeno por año: si viene aca es pq c>0
+            else if(c > 0){ //los ordeno por año: si viene aca es pq c>0    ESTO NO ENTENDI
               dateNode new = addYear(sex, year);
               previous->next = new;
               new->next = aux;
@@ -133,7 +135,7 @@ void addYears(bornADT born, int year, int sex){
   }
 }
 
-nodeDate addYear(int sex, int currentYear) {
+static nodeDate addYear(int sex, int currentYear) {
   dateNode new = malloc(sizeof(nodeDate));
   new->year = currentYear;
 
