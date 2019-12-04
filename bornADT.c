@@ -128,22 +128,19 @@ int hasNextProvince(bornADT b){
 void addYears(bornADT born, int year, int gender, int provinceCode){
   pDate aux = born->firstDate, previous = NULL;
   int c;
-  if(aux == NULL){
-    pDate new = addYear(year, gender);
-    born->firstDate = new;
-    (born->allBorns)++;
-  }
-  else{
-    while(aux != NULL){
-            if((c = compareInt(aux->year, year)) == 0){
+
+  while(aux!= NULL){
+
+            if((c = compareInt(year, aux->year)) == 0){
+              printf("igual a cero\n" );
               if(gender == 1)
                 aux->men+=1;
 
               if(gender == 2)
                 aux->women+=1;
-
+              return ;
             }
-            else if(c > 0){ //los ordeno por año: si viene aca es pq c>0    ESTO NO ENTENDI
+            else if(c < 0){ //los ordeno por año: si viene aca es pq c>0    ESTO NO ENTENDI
               pDate new = addYear(gender, year);
               if(previous == NULL){
                 born->firstDate = new;
@@ -151,17 +148,23 @@ void addYears(bornADT born, int year, int gender, int provinceCode){
               else
                 previous->next = new;
               new->next = aux;
-            }
-            else{
-              pDate new = addYear(gender, year);
-              new->next = aux->next;
-              aux->next = new->next;
+              return ;
             }
             previous = aux;
             aux= aux->next;
-    }
-
   }
+
+  if(aux == NULL){
+    pDate new = addYear(year, gender);
+    if(previous == NULL){
+      born->firstDate = new;
+    }
+    else{
+      previous->next = new;
+    }
+    new->next = NULL;
+  }
+  return ;
 }
 
 static pDate addYear(int gender, int currentYear) {

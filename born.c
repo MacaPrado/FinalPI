@@ -2,11 +2,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include "bornADT.h"
-#define BLOQUE 4000
+
+#define BLOQUE 400
 #define MAX_LENGHT  200
 
 void processProvinceData(FILE * province_data, bornADT b);
-
 void processBornsData(FILE * borns_data, bornADT b);
 
 int main(int argc, char **argv){
@@ -41,16 +41,15 @@ int main(int argc, char **argv){
 
     freeBorn(born);
 
-    printf("HOLA\n");
     return 0;
 }
 
-void processProvinceData(FILE * province_data, bornADT born){
+void processProvinceData(FILE * province_data, bornADT b){
   char buf[BLOQUE]; //defino un vector de chars para poder usar en fgets
     int cont=0;
     int numCampo;
     int code;
-    char province[MAX_LENGHT];
+		char province[MAX_LENGHT];
 
     while(fgets(buf, BLOQUE, province_data)){
         numCampo=0;
@@ -66,21 +65,20 @@ void processProvinceData(FILE * province_data, bornADT born){
             }
 
             if(numCampo == 1){ //recibo el dato de la columna VALOR
-		    strcpy(province, campo);//estoy copiando el nombre de la provinciA
-		    printf("%s\n", province);
-			//POR AHORA FUNCIONA
+      		    strcpy(province, campo);//estoy copiando el nombre de la provincia
+      		    //printf("%s\n", province);
             }
 
             campo = strtok(NULL, ","); //avanzo de campo
             numCampo++;
         }
 
-        addProvinces(born, province, code, sizeCampo);
+        //addProvinces(b, year, sex);
     }
     printf("%d\n", cont);
 }
 
-void processBornsData(FILE * borns_data, bornADT born){
+void processBornsData(FILE * borns_data, bornADT b){
   char buf[BLOQUE]; //defino un vector de chars para poder usar en fgets
     int cont=0;
     int numCampo;
@@ -111,7 +109,7 @@ void processBornsData(FILE * borns_data, bornADT born){
             numCampo++;
         }
 
-        //addYears(b, year, gender, provinceCode);
+        addYears(b, year, gender, provinceCode);
     }
     printf("%d\n", cont);
 
