@@ -22,7 +22,7 @@ typedef struct nodeProv{        //Nodo de provincia con cantidad de nacidos
 //Lista con un puntero hacia el nodo de provincia
 //y un puntero hacia un nodo de fechas
 struct bornCDT{
-    size_t AllBorns;
+    size_t allBorns;
     provNode firstProvince;
     provNode currentProvince;
     dateNode firstDate;
@@ -30,11 +30,15 @@ struct bornCDT{
 };
 static int compare(char c1, char c2){
     return c1-c2;
+}
+static int compareInt(int c1, int c2){
+    return c1-c2;
+}
 
 static void freeProvince(provNode b);
 static void freeDate(dateNode b);
 static provNode addProvince(provNode b, char Province[MAX_LENGTH], int code);
-static nodeDate addYear(int sex, int currentYear);
+static nodeDate addYear(int gender, int currentYear);
 
 
 bornADT new(void){
@@ -100,31 +104,31 @@ static provNode addProvince(provNode b, char Province[MAX_LENGTH], int code){
     }
 }
 
-void addYears(bornADT born, int year, int sex){     //NUNCA LE SUMAMOS UNO A BORNS EN PROVINCE
+void addYears(bornADT born, int year, int gender, int provinceCode){
   dateNode aux = born->firstDate, previous = NULL;
   int c;
   if(aux == NULL){
-    nodeDate new = addYear(year, sex);
+    nodeDate new = addYear(year, gender);
     born->firstDate = new;
-    (born->size)++;   //BORN NO TIENE SIZE, SERIA ALLBORNS?
+    (born->allBorns)++;
   }
   else{
     while(aux != NULL){
-            if((c = compareInt(aux->year, year)) == 0){   //NO EXISTE COMPARE INT
-              if(sex == 1)
+            if((c = compareInt(aux->year, year)) == 0){
+              if(gender == 1)
                 aux->men+=1;
 
-              if(sex == 2)
+              if(gender == 2)
                 aux->women+=1;
 
             }
             else if(c > 0){ //los ordeno por año: si viene aca es pq c>0    ESTO NO ENTENDI
-              dateNode new = addYear(sex, year);
+              dateNode new = addYear(gender, year);
               previous->next = new;
               new->next = aux;
             }
             else{
-              dateNode new = addYear(sex, year);
+              dateNode new = addYear(gender, year);
               new->next = aux->next;
               aux->next = new->next;
             }
@@ -135,14 +139,14 @@ void addYears(bornADT born, int year, int sex){     //NUNCA LE SUMAMOS UNO A BOR
   }
 }
 
-static nodeDate addYear(int sex, int currentYear) {
+static nodeDate addYear(int gender, int currentYear) {
   dateNode new = malloc(sizeof(nodeDate));
   new->year = currentYear;
 
-  if(sex == 1)
+  if(gender == 1)
     new->men=1;
 
-  if(sex == 2)
+  if(gender == 2)
     new -> women = 1;
 
   return new;
