@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "bornADT.h"
-#define BLOQUE 40000
+#define BLOQUE 4000
 #define MAX_LENGHT  200
 
 void processProvinceData(FILE * province_data, bornADT b);
@@ -28,7 +28,7 @@ int main(int argc, char **argv){
     fclose(f); //cuando termino de leer todas las estaciones y agregarlas, cierro el archivo
 
     f = fopen(argv[2], "r"); //abro el archivo de provincias    //ES NECESARIO REPETIR EL CODIGO PORQUE SOLO PUEDO ABRIR UNO POR VEZ
-    
+
     if(f==NULL){
         printf("ERROR: File could not be opened\n"); //FUNCIONA CON FSANITIZE
         return 1;
@@ -36,7 +36,7 @@ int main(int argc, char **argv){
 
     processBornsData(f, born);
     fclose(f); //cuando termino de leer todas las provincias y agregarlas, cierro el archivo
-    
+
     //querys(born);
 
     freeBorn(born);
@@ -71,7 +71,7 @@ void processProvinceData(FILE * province_data, bornADT b){
             campo = strtok(NULL, ","); //avanzo de campo
             numCampo++;
         }
-        
+
         //addYears(b, year, sex);
     }
     printf("%d\n", cont);
@@ -103,8 +103,8 @@ void processBornsData(FILE * borns_data, bornADT b){
             campo = strtok(NULL, ","); //avanzo de campo
             numCampo++;
         }
-        
-        addYears(b, year, sex);
+
+        addYears(b, year, sex); //QUE ES B? Y NECESITA RECIBIR TAMBIEN EL CODIGO DE LA PROVINCIA
     }
     printf("%d\n", cont );
 }
@@ -150,3 +150,4 @@ void processBornsData(FILE * borns_data, bornADT b){
 //     fclose(fp);
 //     return;
 // }
+
