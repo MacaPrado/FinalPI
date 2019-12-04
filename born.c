@@ -50,8 +50,7 @@ void processProvinceData(FILE * province_data, bornADT born){
     int cont=0;
     int numCampo;
     int code;
-		char *province;
-		int sizeCampo=0;
+    char province[MAX_LENGHT];
 
     while(fgets(buf, BLOQUE, province_data)){
         numCampo=0;
@@ -67,9 +66,9 @@ void processProvinceData(FILE * province_data, bornADT born){
             }
 
             if(numCampo == 1){ //recibo el dato de la columna VALOR
-							  sizeCampo = strlen(campo);
-                province = malloc(sizeof(char)*sizeCampo);
-                strcpy(campo, province); //estoy copiando el nombre de la provincia
+		    strcpy(province, campo);//estoy copiando el nombre de la provinciA
+		    printf("%s\n", province);
+			//POR AHORA FUNCIONA
             }
 
             campo = strtok(NULL, ","); //avanzo de campo
