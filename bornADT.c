@@ -145,7 +145,11 @@ void addYears(bornADT born, int year, int gender, int provinceCode){
             }
             else if(c > 0){ //los ordeno por año: si viene aca es pq c>0    ESTO NO ENTENDI
               pDate new = addYear(gender, year);
-              previous->next = new;
+              if(previous == NULL){
+                born->firstDate = new;
+              }
+              else
+                previous->next = new;
               new->next = aux;
             }
             else{
@@ -160,7 +164,7 @@ void addYears(bornADT born, int year, int gender, int provinceCode){
   }
 }
 
-static  pDate  addYear(int gender, int currentYear) {
+static pDate addYear(int gender, int currentYear) {
   pDate new = malloc(sizeof(nodeDate));
   new->year = currentYear;
 
