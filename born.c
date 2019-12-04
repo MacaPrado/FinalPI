@@ -50,6 +50,8 @@ void processProvinceData(FILE * province_data, bornADT b){
     int cont=0;
     int numCampo;
     int code;
+		char *province;
+		int sizeCampo=0;
 
     while(fgets(buf, BLOQUE, province_data)){
         numCampo=0;
@@ -60,19 +62,21 @@ void processProvinceData(FILE * province_data, bornADT b){
         char * campo = strtok(buf, ","); //empiezo a recorrer la linea del CSV
         while(campo){
 
-            if(numCampo == 0){
+            if(numCampo == 0){  //recibo el dato de la columna CODIGO
                 sscanf(campo, "%d", &code);
             }
 
-            /*if(numCampo == 1){ //uso el campo de "hasta" para corroborar si el pasajero es diurno o nocturno
-                sscanf(campo, "%d", &sex); //guardo la hora, descarto los minutos
-            }*/
+            if(numCampo == 1){ //recibo el dato de la columna VALOR
+							  sizeCampo = strlen(campo);
+                province = malloc(sizeof(char)*sizeCampo);
+                strcpy(campo, *province); //estoy copiando el nombre de la provincia
+            }
 
             campo = strtok(NULL, ","); //avanzo de campo
             numCampo++;
         }
 
-        //addYears(b, year, sex);
+        //addProvinces(b, year, sex);
     }
     printf("%d\n", cont);
 }
@@ -81,7 +85,7 @@ void processBornsData(FILE * borns_data, bornADT b){
   char buf[BLOQUE]; //defino un vector de chars para poder usar en fgets
     int cont=0;
     int numCampo;
-    int year, sex;
+    int year, gender, provinceCode;
 
     while(fgets(buf, BLOQUE, borns_data)){
         numCampo=0;
@@ -92,21 +96,26 @@ void processBornsData(FILE * borns_data, bornADT b){
         char * campo = strtok(buf, ","); //empiezo a recorrer la linea del CSV
         while(campo){
 
-            if(numCampo == 0){
+            if(numCampo == 0){		//recibo el dato de la columna AN
                 sscanf(campo, "%d", &year);
             }
 
-            if(numCampo == 1){ //uso el campo de "hasta" para corroborar si el pasajero es diurno o nocturno
-                sscanf(campo, "%d", &sex); //guardo la hora, descarto los minutos
+            if(numCampo == 1){ //recibo el dato de la columna PROVRES
+                sscanf(campo, "%d", &provinceCode);
+            }
+
+						if(numCampo == 3){ //recibo el dato de la columna SEXO
+                sscanf(campo, "%d", &gender);
             }
 
             campo = strtok(NULL, ","); //avanzo de campo
             numCampo++;
         }
 
-        addYears(b, year, sex); //QUE ES B? Y NECESITA RECIBIR TAMBIEN EL CODIGO DE LA PROVINCIA
+        //addYears(b, year, gender, provinceCode);
     }
-    printf("%d\n", cont );
+    printf("%d\n", cont);
+
 }
 
 //NO ESTOY SEGURA DE QUE EL ARMADO DE LOS QUERYS SE HAGA ACA, ¿¿ POR QUE LO HABIAMOS HECHO ASI EN LA ENTREGA ANTERIOR ??
@@ -150,4 +159,5 @@ void processBornsData(FILE * borns_data, bornADT b){
 //     fclose(fp);
 //     return;
 // }
+
 
