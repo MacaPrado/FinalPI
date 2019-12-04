@@ -4,7 +4,7 @@
 #include "bornADT.h"
 
 #define BLOQUE 400
-#define MAX_LENGHT  200
+#define MAX_LENGTH 5000
 
 void processProvinceData(FILE * province_data, bornADT b);
 void processBornsData(FILE * borns_data, bornADT b);
@@ -45,11 +45,12 @@ int main(int argc, char **argv){
 }
 
 void processProvinceData(FILE * province_data, bornADT b){
-  char buf[BLOQUE]; //defino un vector de chars para poder usar en fgets
+    char buf[BLOQUE]; //defino un vector de chars para poder usar en fgets
     int cont=0;
     int numCampo;
     int code;
-		char province[MAX_LENGHT];
+		char *province=malloc(sizeof(char)*MAX_LENGTH);
+
 
     while(fgets(buf, BLOQUE, province_data)){
         numCampo=0;
@@ -65,7 +66,9 @@ void processProvinceData(FILE * province_data, bornADT b){
             }
 
             if(numCampo == 1){ //recibo el dato de la columna VALOR
+
       		    strcpy(province, campo);//estoy copiando el nombre de la provincia
+              province=realloc(province, sizeof(char)*sizeof(campo));
       		    //printf("%s\n", province);
             }
 
@@ -73,8 +76,10 @@ void processProvinceData(FILE * province_data, bornADT b){
             numCampo++;
         }
 
-        //addProvinces(b, year, sex);
+        addProvinces(b, province, code);
+        province=realloc(province, sizeof(char)*MAX_LENGTH);
     }
+    imprimirProvince(b);
     printf("%d\n", cont);
 }
 
@@ -108,9 +113,10 @@ void processBornsData(FILE * borns_data, bornADT b){
             campo = strtok(NULL, ","); //avanzo de campo
             numCampo++;
         }
-
         addYears(b, year, gender, provinceCode);
+
     }
+    imprimirDate(b);
     printf("%d\n", cont);
 
 }

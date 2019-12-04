@@ -18,9 +18,13 @@ int hasNextProvince(bornADT b);
 
 void freeBorn(bornADT b);
 
-void addProvinces(pProv born, char *province, int code, int dimProvince);
+void addProvinces(bornADT born, char *province, int code);
 
 void addYears(bornADT born, int year, int sex, int provinceCode);
+
+void imprimirDate(bornADT born);
+
+void imprimirProvince(bornADT born);
 
 
 
