@@ -3,6 +3,7 @@
 #include <math.h>
 #include <string.h>
 #include "bornADT.h"
+#define MAX_LENGTH 4000
 
 typedef struct nodeDate{        //Estructura con año y sexo del nacido
     dateNode next;       //ORDENARLO POR FECHAS
@@ -28,7 +29,7 @@ struct bornCDT{
     dateNode firstDate;
     dateNode currentDate;
 };
-static int compare(char c1, char c2){
+static int compareChar(char c1, char c2){
     return c1-c2;
 }
 static int compareInt(int c1, int c2){
@@ -37,8 +38,8 @@ static int compareInt(int c1, int c2){
 
 static void freeProvince(provNode b);
 static void freeDate(dateNode b);
-static provNode addProvince(provNode b, char Province[MAX_LENGTH], int code);
-static nodeDate addYear(int gender, int currentYear);
+static nodeProv addProvince(char *province, int code, int dimProvince);
+
 
 
 bornADT new(void){
@@ -46,8 +47,7 @@ bornADT new(void){
     return new;
 }
 
-void
-freeBorn(bornADT b){
+void freeBorn(bornADT b){
     if (b==NULL) {
         return;
     }
@@ -56,8 +56,7 @@ freeBorn(bornADT b){
     free(b);
 }
 
-static void
-freeProvince(provNode b){
+static void freeProvince(provNode b){
     if (b==NULL) {
         return;
     }
@@ -66,8 +65,7 @@ freeProvince(provNode b){
     free(b);
 }
 
-static void
-freeDate(dateNode b){
+static void freeDate(dateNode b){
     if (b==NULL) {
         return;
     }
@@ -76,32 +74,55 @@ freeDate(dateNode b){
 }
 
 int isEmpty(const bornADT b){
-    return b->AllBorns == 0;
+    return b->allBorns == 0;
 }
 
-void toBegin(bornADT b){
-    b->current = b->first;
+void toBeginDate(bornADT b){
+    b->currentDate = b->firstDate;
 }
 
-int hasNext(bornADT b){
-    return b->current != NULL;
+void toBeginProvince(bornADT b){
+    b->currentProvince = b->firstProvince;
 }
 
-void addProvinces(bornADT born, provNode Province){
-    born->firstProvince= addProvince(born->firstProvince, Province); //ERROR: ADDPROVINCE RECIBE 3 PARAMETROS
-    born->AllBorns++;
+int hasNextDate(bornADT b){
+    return b->currentDate != NULL;
 }
 
-static provNode addProvince(provNode b, char Province[MAX_LENGTH], int code){
-    int c;
+int hasNextProvince(bornADT b){
+    return b->currentProvince != NULL;
+}
 
-    if(b == NULL || b->code < code){    //ERROR: QUEREMOS ORDENAR ALFABETICAMENTE, NO POR CODIGO
-        provNode new= malloc(sizeof(struct nodeProv));
-        new->code = code;
-        new->name = malloc(sizeof(char)); //SIZE OF CHAR LE DARIA UN SOLO BYTE, NECESITAMOS QUE SEA DEL TAMANO DE NAME (EJ: CHAR * MAX_LENGHT O ALGO ASI Y DESPUES UN REALLOC)
-        strcpy(new->name, province); //ACA NO IRIA PROVINCE CON P MAYUSCULA?
-        new->next= //FALTA ESTO
+void addProvinces(provNode born, char *province, int code, int dimProvince){
+    provNode actual = born->firstProvince, previous = NULL;
+    if(actual == NULL){
+      nodeProv new = addProvince(province, code, dimProvince, actual);
+      born->firstProvince = new;
+      toBeginProvince(born);
     }
+    else{
+      while(actual != NULL && ((strcmp (actual->name, province)) < 0)){
+        previous = actual;
+        provNode aux = actual->next;
+        actual = aux;
+        born->currentProvince = actual;
+      }
+      if(actual == NULL){
+        nodeProv new = addProvince(province, code, dimProvince, aux);
+      }
+      else{
+
+      }
+    }
+}
+
+static nodeProv addProvince(char *province, int code, int dimProvince, provNode nextNode){
+  provNode new = malloc(sizeof(nodeProv));
+  new->name = province;   //ACA TENDRIA QUE HACER UN STRCPY???? NECESITO DIMPROVINCE???
+  new->code = code;
+  new->next = nextNode;
+
+  return new;
 }
 
 void addYears(bornADT born, int year, int gender, int provinceCode){
@@ -110,6 +131,7 @@ void addYears(bornADT born, int year, int gender, int provinceCode){
   if(aux == NULL){
     nodeDate new = addYear(year, gender);
     born->firstDate = new;
+    toBeginDate(born);
     (born->allBorns)++;
   }
   else{
@@ -139,7 +161,7 @@ void addYears(bornADT born, int year, int gender, int provinceCode){
   }
 }
 
-static nodeDate addYear(int gender, int currentYear) {
+static nodeDate addYear(int gender, int currentYear) { //FALTA QUE NEXT APUNTE AL SIGUIENTE
   dateNode new = malloc(sizeof(nodeDate));
   new->year = currentYear;
 

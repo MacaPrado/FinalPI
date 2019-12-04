@@ -45,7 +45,7 @@ int main(int argc, char **argv){
     return 0;
 }
 
-void processProvinceData(FILE * province_data, bornADT b){
+void processProvinceData(FILE * province_data, bornADT born){
   char buf[BLOQUE]; //defino un vector de chars para poder usar en fgets
     int cont=0;
     int numCampo;
@@ -69,19 +69,19 @@ void processProvinceData(FILE * province_data, bornADT b){
             if(numCampo == 1){ //recibo el dato de la columna VALOR
 							  sizeCampo = strlen(campo);
                 province = malloc(sizeof(char)*sizeCampo);
-                strcpy(campo, *province); //estoy copiando el nombre de la provincia
+                strcpy(campo, province); //estoy copiando el nombre de la provincia
             }
 
             campo = strtok(NULL, ","); //avanzo de campo
             numCampo++;
         }
 
-        //addProvinces(b, year, sex);
+        addProvinces(born, province, code, sizeCampo);
     }
     printf("%d\n", cont);
 }
 
-void processBornsData(FILE * borns_data, bornADT b){
+void processBornsData(FILE * borns_data, bornADT born){
   char buf[BLOQUE]; //defino un vector de chars para poder usar en fgets
     int cont=0;
     int numCampo;
@@ -159,5 +159,3 @@ void processBornsData(FILE * borns_data, bornADT b){
 //     fclose(fp);
 //     return;
 // }
-
-

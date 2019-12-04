@@ -10,14 +10,18 @@ bornADT new(void);
 
 int isEmpty(const bornADT b);
 
-void toBegin(bornADT b);
+void toBeginDate(bornADT b);
 
-int hasNext(bornADT b);
+void toBeginProvince(bornADT b);
+
+int hasNextDate(bornADT b);
+
+int hasNextProvince(bornADT b);
 
 void freeBorn(bornADT b);
 
-void addProvinces(bornADT born, provNode Province);
+void addProvinces(provNode born, char *province, int code, int dimProvince);
 
-void addYears(bornADT born, int year, int sex);
+void addYears(bornADT born, int year, int gender, int provinceCode);
 
 #endif
