@@ -95,10 +95,14 @@ void addProvinces(bornADT born, char *province, int code){
 
     while(aux != NULL){
 
+        if((strcmp (aux->province, province)) == 0)		//AGREGUE ESTO
+	  aux->borns += 1;
+
         if((strcmp (aux->province, province)) > 0){
 
           pProv new = addProvince(province, code);
           previous->next = new;
+	  new->borns = 1;
           new->next = aux;
           return ;
         }
@@ -115,7 +119,9 @@ void addProvinces(bornADT born, char *province, int code){
         else{
           previous->next = new;
         }
+	new->borns = 1;
         new->next = NULL;
+
     }
     return ;
 }
