@@ -97,14 +97,13 @@ void addProvinces(bornADT born, char *province, int code){
     while(aux != NULL){
 
         if((strcmp (province, aux->province)) < 0){
-	  printf("compara bien\n");
           pProv new = addProvince(province, code);
           if(previous == NULL)
-                born->firstDate = new;              
+                born->firstProvince = new;
           else
                 previous->next = new;
 
-	  new->next = aux;
+	              new->next = aux;
           return ;
         }
         previous = aux;
@@ -127,7 +126,7 @@ void addProvinces(bornADT born, char *province, int code){
 
 static pProv addProvince(char *province, int code){
   pProv new = malloc(sizeof(nodeProv));
-  new->province=malloc(sizeof(char)*DIM);
+  new->province = malloc(sizeof(char)*DIM);
   strcpy(new->province, province);
   new->code = code;
 

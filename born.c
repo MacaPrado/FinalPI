@@ -78,7 +78,7 @@ void processProvinceData(FILE * province_data, bornADT b){
     }
 		free(province);
     imprimirProvince(b);
-    printf("%d\n", cont);
+    printf("%d\n", cont);			//HABRIA QUE ELIMINARLA ANTES DE ENTREGAR EL TP
 
 }
 
