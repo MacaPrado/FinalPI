@@ -4,7 +4,7 @@
 #include "bornADT.h"
 
 #define BLOQUE 400
-#define MAX_LENGTH 5000
+#define MAX_LENGTH 100
 
 void processProvinceData(FILE * province_data, bornADT b);
 void processBornsData(FILE * borns_data, bornADT b);
@@ -66,21 +66,21 @@ void processProvinceData(FILE * province_data, bornADT b){
             }
 
             if(numCampo == 1){ //recibo el dato de la columna VALOR
-
       		    strcpy(province, campo);//estoy copiando el nombre de la provincia
-              province=realloc(province, sizeof(char)*sizeof(campo));
-      		    //printf("%s\n", province);
+      		    printf("%s\n", province);
             }
 
             campo = strtok(NULL, ","); //avanzo de campo
             numCampo++;
         }
 
+
         addProvinces(b, province, code);
-        province=realloc(province, sizeof(char)*MAX_LENGTH);
     }
-    imprimirProvince(b);
+		free(province);
+    //imprimirProvince(b);
     printf("%d\n", cont);
+
 }
 
 void processBornsData(FILE * borns_data, bornADT b){

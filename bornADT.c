@@ -95,14 +95,10 @@ void addProvinces(bornADT born, char *province, int code){
 
     while(aux != NULL){
 
-        if((strcmp (aux->province, province)) == 0)		//AGREGUE ESTO
-	  aux->borns += 1;
-
         if((strcmp (aux->province, province)) > 0){
 
           pProv new = addProvince(province, code);
           previous->next = new;
-	  new->borns = 1;
           new->next = aux;
           return ;
         }
@@ -112,16 +108,14 @@ void addProvinces(bornADT born, char *province, int code){
 
     if(aux == NULL){
       pProv new = addProvince(province, code);
-      printf("Entre al if\n");
+      printf("Entre al if\n");                    //HABRIA QUE ELIMINARLA ANTES DE ENTREGAR EL TP
         if(previous == NULL)
           born->firstProvince = new;
 
         else{
           previous->next = new;
         }
-	new->borns = 1;
         new->next = NULL;
-
     }
     return ;
 }
@@ -193,7 +187,7 @@ static pDate addYear(int gender, int currentYear) {
   return new;
 }
 
-void imprimirDate(bornADT born){
+void imprimirDate(bornADT born){            //HABRIA QUE ELIMINARLA ANTES DE ENTREGAR EL TP
   pDate aux = born->firstDate;
   while(aux != NULL){
     printf("year: %d; male: %d; female:%d\n", aux->year, aux->male, aux->female);
@@ -203,7 +197,7 @@ void imprimirDate(bornADT born){
   return;
 }
 
-void imprimirProvince(bornADT born){
+void imprimirProvince(bornADT born){            //HABRIA QUE ELIMINARLA ANTES DE ENTREGAR EL TP
   pProv aux = born->firstProvince;
   while(aux != NULL){
     printf("provincia: %s; code: %d\n", aux->province, aux->code);
@@ -212,15 +206,16 @@ void imprimirProvince(bornADT born){
   return;
 }
 
+
 ////////////                                AGREGUE ESTO                                ///////
 ////////////                                AGREGUE ESTO                                ///////////////////                                AGREGUE ESTO                                ///////
 ////////////                                AGREGUE ESTO                                ///////
-
+/*
 size_t calculatePercentage(bornADT born, char ** provinces, int ** percentage){
 	pProv aux = born->firstProvince;
 	char * ans1=NULL;
 	int * ans2=NULL;
-	size_t dim=0;  
+	size_t dim=0;
 
 	while (aux != NULL) {
 		if (dim%MAX_LENGHT==0) {
@@ -238,9 +233,9 @@ size_t calculatePercentage(bornADT born, char ** provinces, int ** percentage){
 	ans2 = realloc(ans2, dim*sizeof(int));
 	ans1[dim] = '0';
 	*provinces = ans1;
-	*percentage = ans2; 
+	*percentage = ans2;
 	return dim;
-}
+}*/
 ////////////                                AGREGUE ESTO                                ///////
 ////////////                                AGREGUE ESTO                                ///////
 ////////////                                AGREGUE ESTO                                ///////
