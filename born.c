@@ -8,6 +8,7 @@
 
 void processProvinceData(FILE * province_data, bornADT b);
 void processBornsData(FILE * borns_data, bornADT b);
+void query1(bornADT born);
 
 int main(int argc, char **argv){
 
@@ -35,9 +36,9 @@ int main(int argc, char **argv){
     }
 
     processBornsData(f, born);
-    fclose(f); //cuando termino de leer todas las provincias y agregarlas, cierro el archivo
+    query1(born);
 
-    //querys(born);
+    fclose(f); //cuando termino de leer todas las provincias y agregarlas, cierro el archivo
 
     freeBorn(born);
     return 0;
@@ -76,6 +77,7 @@ void processProvinceData(FILE * province_data, bornADT b){
         addProvinces(b, province, code);
     }
 		free(province);
+    return;
 }
 
 void processBornsData(FILE * borns_data, bornADT b){
@@ -113,28 +115,38 @@ void processBornsData(FILE * borns_data, bornADT b){
 
     }
     imprimirProvince(b);
-
     imprimirDate(b);
-}
 
-//NO ESTOY SEGURA DE QUE EL ARMADO DE LOS QUERYS SE HAGA ACA, ¿¿ POR QUE LO HABIAMOS HECHO ASI EN LA ENTREGA ANTERIOR ??
+    return;
+}
 
 
 //______________________________________IDEA DE query1       NO LO PROBE CON FSANITIZE, ES UNA IDEA
 
-// void query1(char *provinces[],long int bornByProvince[], const int dim){ //DONDE DIM ES EL NUMERO DE PROVINCIAS QUE DEBERIAMOS IR SUMANDO EN CADA ADD
-//     FILE *fp;
-//     fp=fopen("query1.csv", "w");             //ASI SE CREA EL ARCHIVO
-//     fprintf(fp, "Provincia;Nacimientos\n");                          //SI YA LOS ORDENAMOS ALFABETICAMENTE, ESE CODIGO PUEDE SER REUTILIZADO EN EL QUERY3 (QUE PIDE ORDEN POR PORCENTAJE Y ALFABETICO)
-//     for(int i=0; i<dim; i++){
-//         fprintf(fp, "%s;%ld\n", provinces[i],bornByProvince[i]);
-//     }
-//     fclose(fp);
-//     return;
-// }
-//
-// //______________________________________IDEA DE query2       NO LO PROBE CON FSANITIZE, ES UNA IDEA
-//
+void query1(bornADT born){
+    FILE *fp;
+    fp=fopen("query1.csv", "w");             //ASI SE CREA EL ARCHIVO
+    fprintf(fp, "Provincias;Nacimientos\n");    //SI YA LOS ORDENAMOS ALFABETICAMENTE, ESE CODIGO PUEDE SER REUTILIZADO EN EL QUERY3 (QUE PIDE ORDEN POR PORCENTAJE Y ALFABETICO)
+
+    char **provinces;
+    int *bornsByProvince;
+
+    int dim= listProvinces(born, &provinces, &bornsByProvince);
+
+    for(int i = 0; i < dim; i++){
+        fprintf(fp, "%s;%d\n",provinces[i], bornsByProvince[i]);
+
+    }
+    free(provinces);
+    free(bornsByProvince);
+    fclose(fp);
+
+    return;
+}
+
+
+//______________________________________IDEA DE query2       NO LO PROBE CON FSANITIZE, ES UNA IDEA
+
 // void query2(int *year, int *male, int *female, const int years){
 //     FILE *fp;
 //     fp=fopen("query2.csv", "w");

@@ -4,7 +4,7 @@
 #include <string.h>
 #include "bornADT.h"
 
-#define MAX_LENGHT  200
+#define MAX_LENGTH  200
 #define DIM 100
 
 typedef struct nodeDate{
@@ -12,7 +12,6 @@ typedef struct nodeDate{
     int year;
     int male;
     int female;
-
 }nodeDate;
 
 
@@ -204,6 +203,36 @@ static pDate addYear(int gender, int currentYear) {
   return new;
 }
 
+int calculatePercentage(bornADT born, pProv node){
+	int percentage = (int)(((node->borns)*100)/(born->allBorns));
+  return percentage;
+}
+
+int listProvinces(bornADT born, char *** provinces,int **bornsByProvince){
+  pProv aux = born->firstProvince;
+  int i = 0;
+  **provinces = malloc(MAX_LENGTH*sizeof(char));
+
+  int *borns = NULL;
+
+  while(aux != NULL){
+    if(i%DIM == 0){
+      borns= realloc(borns, (i+DIM)*sizeof(int));
+    }
+    strcpy(**provinces, aux->province);
+    borns[i] = aux->borns;
+
+    i++;
+    aux=aux->next;
+	}
+  borns= realloc(borns, i*sizeof(int));
+
+  *bornsByProvince = borns;
+  return i;
+}
+
+
+
 void imprimirDate(bornADT born){            //HABRIA QUE ELIMINARLA ANTES DE ENTREGAR EL TP
   pDate aux = born->firstDate;
   while(aux != NULL){
@@ -221,18 +250,4 @@ void imprimirProvince(bornADT born){            //HABRIA QUE ELIMINARLA ANTES DE
     aux = aux->next;
   }
   return;
-}
-
-// void imprimirPorcentaje(bornADT born){
-//   pProv aux = born->firstProvince;
-//   while(aux != NULL){
-//     printf("provincia: %s; code: %d; borns: %d, \n", aux->province, aux->code, aux->borns);
-//     aux = aux->next;
-//   }
-//
-//   return;
-// }
-int calculatePercentage(bornADT born, pProv node){
-	int percentage = (int)(((node->borns)*100)/(born->allBorns));
-  return percentage;
 }
