@@ -5,6 +5,7 @@
 #include "bornADT.h"
 
 #define MAX_LENGHT  200
+#define DIM 100
 
 typedef struct nodeDate{
     pDate next;
@@ -95,20 +96,19 @@ void addProvinces(bornADT born, char *province, int code){
 
     while(aux != NULL){
 
-        if((strcmp (aux->province, province)) > 0){
+        if((strcmp (aux->province, province)) > 0){ //TIRA ERROR ACA
 
           pProv new = addProvince(province, code);
           previous->next = new;
           new->next = aux;
           return ;
-        }
+        }                     //HASTA ACA
         previous = aux;
         aux = aux->next;
     }
 
     if(aux == NULL){
       pProv new = addProvince(province, code);
-      printf("Entre al if\n");                    //HABRIA QUE ELIMINARLA ANTES DE ENTREGAR EL TP
         if(previous == NULL)
           born->firstProvince = new;
 
@@ -122,6 +122,7 @@ void addProvinces(bornADT born, char *province, int code){
 
 static pProv addProvince(char *province, int code){
   pProv new = malloc(sizeof(nodeProv));
+  new->province=malloc(sizeof(char)*DIM);
   strcpy(new->province, province);
   new->code = code;
 

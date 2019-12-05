@@ -67,7 +67,6 @@ void processProvinceData(FILE * province_data, bornADT b){
 
             if(numCampo == 1){ //recibo el dato de la columna VALOR
       		    strcpy(province, campo);//estoy copiando el nombre de la provincia
-      		    printf("%s\n", province);
             }
 
             campo = strtok(NULL, ","); //avanzo de campo
@@ -78,7 +77,7 @@ void processProvinceData(FILE * province_data, bornADT b){
         addProvinces(b, province, code);
     }
 		free(province);
-    //imprimirProvince(b);
+    imprimirProvince(b);
     printf("%d\n", cont);
 
 }
