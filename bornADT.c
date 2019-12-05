@@ -205,3 +205,37 @@ void imprimirProvince(bornADT born){
   }
   return;
 }
+
+////////////                                AGREGUE ESTO                                ///////
+////////////                                AGREGUE ESTO                                ///////////////////                                AGREGUE ESTO                                ///////
+////////////                                AGREGUE ESTO                                ///////
+
+size_t calculatePercentage(bornADT born, char ** provinces, int ** percentage){
+	pProv aux = born->firstProvince;
+	char * ans1=NULL;
+	int * ans2=NULL;
+	size_t dim=0;  
+
+	while (aux != NULL) {
+		if (dim%MAX_LENGHT==0) {
+			ans1 = realloc(ans1, (dim+MAX_LENGHT)*sizeof(char));
+			ans2 = realloc(ans2, (dim+MAX_LENGHT)*sizeof(int));
+		}
+
+		ans1[dim] = aux->province;
+		ans2[dim] = (int)(((aux->borns)*100)/(born->allBorns));
+		dim++;
+		aux = aux->next;
+	}
+
+	ans1 = realloc(ans1, dim*sizeof(char)+1);
+	ans2 = realloc(ans2, dim*sizeof(int));
+	ans1[dim] = '0';
+	*provinces = ans1;
+	*percentage = ans2; 
+	return dim;
+}
+////////////                                AGREGUE ESTO                                ///////
+////////////                                AGREGUE ESTO                                ///////
+////////////                                AGREGUE ESTO                                ///////
+////////////                                AGREGUE ESTO                                ///////
