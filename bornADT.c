@@ -129,12 +129,26 @@ static pProv addProvince(char *province, int code){
   new->province = malloc(sizeof(char)*DIM);
   strcpy(new->province, province);
   new->code = code;
+  new->borns = 0;
 
   return new;
 }
 
+void addBorn(bornADT born, int provinceCode){
+    pProv aux = born->firstProvince;
 
-void addYears(bornADT born, int year, int gender, int provinceCode){        //FALTA SUMARLE UNO A LAS PROVINCIAS
+    while ( aux != NULL && aux->code != provinceCode){
+      aux = aux->next;
+    }
+    if(aux == NULL){
+      return;
+    }
+
+    aux->borns += 1;
+}
+
+
+void addYears(bornADT born, int year, int gender){
   pDate aux = born->firstDate, previous = NULL;
   int c;
   while(aux!= NULL){
@@ -148,7 +162,7 @@ void addYears(bornADT born, int year, int gender, int provinceCode){        //FA
               born->allBorns+=1;
               return ;
             }
-            else if(c < 0){ //los ordeno por año: si viene aca es pq c>0
+            else if(c < 0){
               pDate new = addYear(gender, year);
               if(previous == NULL){
                 born->firstDate = new;
@@ -192,30 +206,7 @@ static pDate addYear(int gender, int currentYear) {
   return new;
 }
 
-void imprimirDate(bornADT born){            //HABRIA QUE ELIMINARLA ANTES DE ENTREGAR EL TP
-  pDate aux = born->firstDate;
-  while(aux != NULL){
-    printf("year: %d; male: %d; female:%d\n", aux->year, aux->male, aux->female);
-    aux = aux->next;
-  }
-  printf("%d\n", born->allBorns);
-  return;
-}
 
-void imprimirProvince(bornADT born){            //HABRIA QUE ELIMINARLA ANTES DE ENTREGAR EL TP
-  pProv aux = born->firstProvince;
-  while(aux != NULL){
-    printf("provincia: %s; code: %d\n", aux->province, aux->code);
-    aux = aux->next;
-  }
-  return;
-}
-
-
-////////////                                AGREGUE ESTO                                ///////
-////////////                                AGREGUE ESTO                                ///////////////////                                AGREGUE ESTO                                ///////
-////////////                                AGREGUE ESTO                                ///////
-/*
 size_t calculatePercentage(bornADT born, char ** provinces, int ** percentage){
 	pProv aux = born->firstProvince;
 	char * ans1=NULL;
@@ -240,8 +231,49 @@ size_t calculatePercentage(bornADT born, char ** provinces, int ** percentage){
 	*provinces = ans1;
 	*percentage = ans2;
 	return dim;
-}*/
-////////////                                AGREGUE ESTO                                ///////
-////////////                                AGREGUE ESTO                                ///////
-////////////                                AGREGUE ESTO                                ///////
-////////////                                AGREGUE ESTO                                ///////
+}
+
+void querys(bornADT born){
+
+}
+*/
+//////////
+/////////           //HABRIA QUE ELIMINARLA ANTES DE ENTREGAR EL TP
+void imprimirDate(bornADT born){
+  pDate aux = born->firstDate;
+  while(aux != NULL){
+    printf("year: %d; male: %d; female:%d\n", aux->year, aux->male, aux->female);
+    aux = aux->next;
+  }
+  printf("%d\n", born->allBorns);
+  return;
+}
+
+void imprimirProvince(bornADT born){
+  pProv aux = born->firstProvince;
+  while(aux != NULL){
+    printf("provincia: %s; code: %d; borns: %d\n", aux->province, aux->code, aux->borns);
+    aux = aux->next;
+  }
+  return;
+}
+
+void imprimePorcentaje(bornADT born){
+  int * percentages;
+	char * provinces;
+	size_t dim = calculatePercentage(born,&provinces, &percentages);
+	int j=0, max=0, i;
+		for(i = 0; i < dim; i++){
+			if (percentages[max]<percentages[i]) {
+				max=i;
+			}
+      printf("%s\t %d\n", provinces, percentages);
+		}
+
+	free(percentages);
+	free(provinces);
+
+  return;
+}
+//////////
+/////////

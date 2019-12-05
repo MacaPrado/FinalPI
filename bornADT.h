@@ -20,12 +20,13 @@ void freeBorn(bornADT b);
 
 void addProvinces(bornADT born, char *province, int code);
 
-void addYears(bornADT born, int year, int sex, int provinceCode);
+void addYears(bornADT born, int year, int gender);
 
 void imprimirDate(bornADT born);
 
 void imprimirProvince(bornADT born);
 
+void addBorn(bornADT born, int provinceCode);
 
 
 #endif

@@ -77,7 +77,7 @@ void processProvinceData(FILE * province_data, bornADT b){
         addProvinces(b, province, code);
     }
 		free(province);
-    imprimirProvince(b);
+
     printf("%d\n", cont);			//HABRIA QUE ELIMINARLA ANTES DE ENTREGAR EL TP
 
 }
@@ -112,10 +112,12 @@ void processBornsData(FILE * borns_data, bornADT b){
             campo = strtok(NULL, ","); //avanzo de campo
             numCampo++;
         }
-        addYears(b, year, gender, provinceCode);
+        addYears(b, year, gender);
+				addBorn(b, provinceCode);
 
     }
     imprimirDate(b);
+		imprimirProvince(b);
     printf("%d\n", cont);
 
 }
