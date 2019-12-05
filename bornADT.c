@@ -96,15 +96,20 @@ void addProvinces(bornADT born, char *province, int code){
 
     while(aux != NULL){
 
-        if((strcmp (aux->province, province)) > 0){ //TIRA ERROR ACA
-
+        if((strcmp (province, aux->province)) < 0){
+	  printf("compara bien\n");
           pProv new = addProvince(province, code);
-          previous->next = new;
-          new->next = aux;
+          if(previous == NULL)
+                born->firstDate = new;              
+          else
+                previous->next = new;
+
+	  new->next = aux;
           return ;
-        }                     //HASTA ACA
+        }
         previous = aux;
         aux = aux->next;
+
     }
 
     if(aux == NULL){
