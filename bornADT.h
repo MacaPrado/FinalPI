@@ -28,5 +28,5 @@ void imprimirProvince(bornADT born);
 
 void addBorn(bornADT born, int provinceCode);
 
-
+int calculatePercentage(bornADT born, pProv node);
 #endif

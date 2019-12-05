@@ -4,7 +4,7 @@
 #include "bornADT.h"
 
 #define BLOQUE 400
-#define MAX_LENGTH 100
+#define MAX_LENGTH 5000
 
 void processProvinceData(FILE * province_data, bornADT b);
 void processBornsData(FILE * borns_data, bornADT b);
@@ -40,7 +40,6 @@ int main(int argc, char **argv){
     //querys(born);
 
     freeBorn(born);
-
     return 0;
 }
 
@@ -77,9 +76,6 @@ void processProvinceData(FILE * province_data, bornADT b){
         addProvinces(b, province, code);
     }
 		free(province);
-
-    printf("%d\n", cont);			//HABRIA QUE ELIMINARLA ANTES DE ENTREGAR EL TP
-
 }
 
 void processBornsData(FILE * borns_data, bornADT b){
@@ -112,14 +108,13 @@ void processBornsData(FILE * borns_data, bornADT b){
             campo = strtok(NULL, ","); //avanzo de campo
             numCampo++;
         }
+        addBorn(b, provinceCode);
         addYears(b, year, gender);
-				addBorn(b, provinceCode);
 
     }
-    imprimirDate(b);
-		imprimirProvince(b);
-    printf("%d\n", cont);
+    imprimirProvince(b);
 
+    imprimirDate(b);
 }
 
 //NO ESTOY SEGURA DE QUE EL ARMADO DE LOS QUERYS SE HAGA ACA, ¿¿ POR QUE LO HABIAMOS HECHO ASI EN LA ENTREGA ANTERIOR ??
