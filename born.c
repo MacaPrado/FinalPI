@@ -8,8 +8,10 @@
 
 void processProvinceData(FILE * province_data, bornADT b);
 void processBornsData(FILE * borns_data, bornADT b);
-void query2(bornADT born);
+
 void query1(bornADT born);
+void query2(bornADT born);
+void query3(bornADT born);
 
 int main(int argc, char **argv){
 
@@ -38,12 +40,13 @@ int main(int argc, char **argv){
 
     processBornsData(f, born);
     fclose(f); //cuando termino de leer todas las provincias y agregarlas, cierro el archivo
+	
     query1(born);
     query2(born);
-
-		//processQueries(born);
+    query3(born);
 
     freeBorn(born);
+
     return 0;
 }
 
@@ -52,8 +55,7 @@ void processProvinceData(FILE * province_data, bornADT b){
     int cont=0;
     int numCampo;
     int code;
-		char *province=malloc(sizeof(char)*MAX_LENGTH);
-
+    char *province=malloc(sizeof(char)*MAX_LENGTH);
 
     while(fgets(buf, BLOQUE, province_data)){
         numCampo=0;
@@ -75,11 +77,9 @@ void processProvinceData(FILE * province_data, bornADT b){
             campo = strtok(NULL, ","); //avanzo de campo
             numCampo++;
         }
-
-
         addProvinces(b, province, code);
     }
-		free(province);
+    free(province);
     return;
 }
 
@@ -106,7 +106,7 @@ void processBornsData(FILE * borns_data, bornADT b){
                 sscanf(campo, "%d", &provinceCode);
             }
 
-						if(numCampo == 3){ //recibo el dato de la columna SEXO
+	    if(numCampo == 3){ //recibo el dato de la columna SEXO
                 sscanf(campo, "%d", &gender);
             }
 
@@ -117,29 +117,42 @@ void processBornsData(FILE * borns_data, bornADT b){
         addYears(b, year, gender);
 
     }
-    return;
+    //imprimirProvince(b);
+
+   // imprimirDate(b);
 }
+
+//NO ESTOY SEGURA DE QUE EL ARMADO DE LOS QUERYS SE HAGA ACA, ¿¿ POR QUE LO HABIAMOS HECHO ASI EN LA ENTREGA ANTERIOR ??
+
+
+//______________________________________IDEA DE query1       NO LO PROBE CON FSANITIZE, ES UNA IDEA
 
 void query1(bornADT born){
-    FILE *fp = fopen("query1.csv", "w");
+    FILE *fp;
+    fp=fopen("query1.csv", "w");             //ASI SE CREA EL ARCHIVO
     fprintf(fp, "Provincias;Nacimientos\n");    //SI YA LOS ORDENAMOS ALFABETICAMENTE, ESE CODIGO PUEDE SER REUTILIZADO EN EL QUERY3 (QUE PIDE ORDEN POR PORCENTAJE Y ALFABETICO)
 
-    //char **provinces;
+    int len;
+    char **provinces;
     int *bornsByProvince;
 
-    //int dim = listProvinces(born, &provinces, &bornsByProvince);
-    int dim = listProvinces(born, &bornsByProvince);
+    int dim= listProvinces(born, &provinces, &bornsByProvince);
 
     for(int i = 0; i < dim; i++){
-        //fprintf(fp, "%s;%d\n",provinces[i], bornsByProvince[i]);
-        fprintf(fp, "%d\n", bornsByProvince[i]);
-    }
+	len=strlen(provinces[i]);
+	if(len > 0)
+		provinces[i][len-2]='\0';	
+        fprintf(fp, "%s;%d\n",provinces[i], bornsByProvince[i]);
 
+    }
+    
+    free(provinces);
+    free(bornsByProvince);
     fclose(fp);
-		//free(provinces);
-		free(bornsByProvince);
+
     return;
 }
+
 
 void query2(bornADT born){
      FILE *fp;
@@ -158,17 +171,28 @@ void query2(bornADT born){
 	free(female);
 	free(male);
 
-  fclose(fp);
-  return;
+     fclose(fp);
+     return; 
 }
 
-// void query3(char *provinces[],int percentage[], const int dim){      //TENDRIAMOS QUE PONERLE CONST A ESTOS VECTORES EN CADA QUERY?
-//     FILE *fp;
-//     fp=fopen("query3.csv", "w");
-//     fprintf(fp, "Provincia;Porcentaje\n");
-//     for(int i=0; i<dim; i++){
-//         fprintf(fp, "%s;%ld%%\n", provinces[i],percentage[i]);
-//     }
-//     fclose(fp);
-//     return;
-// }
+// //______________________________________IDEA DE Query3       NO LO PROBE CON FSANITIZE, ES UNA IDEA
+
+void query3(bornADT born){      //TENDRIAMOS QUE PONERLE CONST A ESTOS VECTORES EN CADA QUERY?
+    FILE *fp;
+    fp=fopen("query3.csv", "w");
+    fprintf(fp, "Porcentaje\n");
+    int len;
+    int *percentage;
+
+    int dim= orderByPercentage(born, &percentage);
+
+    for(int i = 0; i < dim; i++){	
+        fprintf(fp, "%d\n", percentage[i]);
+    }
+    
+    free(percentage);
+
+    fclose(fp);
+    return;
+}
+
