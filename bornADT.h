@@ -28,7 +28,13 @@ void imprimirProvince(bornADT born);
 
 void addBorn(bornADT born, int provinceCode);
 
+void processQueries(bornADT born);
+
 int calculatePercentage(bornADT born, pProv node);
 
-int listProvinces(bornADT born, char ***provinces, int **bornsByProvince);
+//int listProvinces(bornADT born, char ***provinces, int **bornsByProvince);
+int listProvinces(bornADT born, int **bornsByProvince);
+
+int listYears(bornADT born, int **years, int **males, int **females);
+
 #endif

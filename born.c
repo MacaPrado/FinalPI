@@ -8,6 +8,7 @@
 
 void processProvinceData(FILE * province_data, bornADT b);
 void processBornsData(FILE * borns_data, bornADT b);
+void query2(bornADT born);
 void query1(bornADT born);
 
 int main(int argc, char **argv){
@@ -36,9 +37,11 @@ int main(int argc, char **argv){
     }
 
     processBornsData(f, born);
-    query1(born);
-
     fclose(f); //cuando termino de leer todas las provincias y agregarlas, cierro el archivo
+    query1(born);
+    query2(born);
+
+		//processQueries(born);
 
     freeBorn(born);
     return 0;
@@ -114,52 +117,51 @@ void processBornsData(FILE * borns_data, bornADT b){
         addYears(b, year, gender);
 
     }
-    imprimirProvince(b);
-    imprimirDate(b);
-
     return;
 }
-
-
-//______________________________________IDEA DE query1       NO LO PROBE CON FSANITIZE, ES UNA IDEA
 
 void query1(bornADT born){
-    FILE *fp;
-    fp=fopen("query1.csv", "w");             //ASI SE CREA EL ARCHIVO
+    FILE *fp = fopen("query1.csv", "w");
     fprintf(fp, "Provincias;Nacimientos\n");    //SI YA LOS ORDENAMOS ALFABETICAMENTE, ESE CODIGO PUEDE SER REUTILIZADO EN EL QUERY3 (QUE PIDE ORDEN POR PORCENTAJE Y ALFABETICO)
 
-    char **provinces;
+    //char **provinces;
     int *bornsByProvince;
 
-    int dim= listProvinces(born, &provinces, &bornsByProvince);
+    //int dim = listProvinces(born, &provinces, &bornsByProvince);
+    int dim = listProvinces(born, &bornsByProvince);
 
     for(int i = 0; i < dim; i++){
-        fprintf(fp, "%s;%d\n",provinces[i], bornsByProvince[i]);
-
+        //fprintf(fp, "%s;%d\n",provinces[i], bornsByProvince[i]);
+        fprintf(fp, "%d\n", bornsByProvince[i]);
     }
-    free(provinces);
-    free(bornsByProvince);
-    fclose(fp);
 
+    fclose(fp);
+		//free(provinces);
+		free(bornsByProvince);
     return;
 }
 
+void query2(bornADT born){
+     FILE *fp;
+     fp=fopen("query2.csv", "w");
+     fprintf(fp, "Año;Varón;Mujer\n");
 
-//______________________________________IDEA DE query2       NO LO PROBE CON FSANITIZE, ES UNA IDEA
+	int *year, *male, *female;
 
-// void query2(int *year, int *male, int *female, const int years){
-//     FILE *fp;
-//     fp=fopen("query2.csv", "w");
-//     fprintf(fp, "Año;Varón;Mujer\n");
-//     for(int i=0; i<years; i++){
-//         fprintf(fp, "%d;%ld;%ld\n", year[i],male[i],female[i]);
-//     }
-//     fclose(fp);
-//     return;
-// }
-//
-// //______________________________________IDEA DE Query3       NO LO PROBE CON FSANITIZE, ES UNA IDEA
-//
+	int dim= listYears(born, &year, &male, &female);
+
+     for(int i=0; i<dim; i++){
+         fprintf(fp, "%d;%d;%d\n", year[i], male[i], female[i]);
+     }
+
+	free(year);
+	free(female);
+	free(male);
+
+  fclose(fp);
+  return;
+}
+
 // void query3(char *provinces[],int percentage[], const int dim){      //TENDRIAMOS QUE PONERLE CONST A ESTOS VECTORES EN CADA QUERY?
 //     FILE *fp;
 //     fp=fopen("query3.csv", "w");

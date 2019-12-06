@@ -24,10 +24,12 @@ typedef struct nodeProv{
 
 struct bornCDT{
     int allBorns;
+    int sizeDates;
+    int sizeProvinces;
     pProv firstProvince;
-    pProv currentProvince;
+    pProv currentProvince;      //SI NO LOS USAMOS, BORRARLOS
     pDate firstDate;
-    pDate currentDate;
+    pDate currentDate;          //SI NO LOS USAMOS, BORRARLOS
 };
 
 static int compareInt(int c1, int c2){
@@ -37,7 +39,9 @@ static int compareInt(int c1, int c2){
 static void freeProvince(pProv b);
 static void freeDate(pDate  b);
 static pProv addProvince(char *province, int code);
-static  pDate  addYear(int gender, int currentYear);
+static pDate addYear(int gender, int currentYear);
+
+//static void dataForQuery2(pDate aux, int *years,long int *males, long int *females, int dimYears);
 
 
 bornADT new(void){
@@ -108,6 +112,7 @@ void addProvinces(bornADT born, char *province, int code){
 
         if((strcmp (province, aux->province)) < 0){
           pProv new = addProvince(province, code);
+          born->sizeProvinces += 1;
           if(previous == NULL)
                 born->firstProvince = new;
           else
@@ -123,6 +128,7 @@ void addProvinces(bornADT born, char *province, int code){
 
     if(aux == NULL){
       pProv new = addProvince(province, code);
+      born->sizeProvinces += 1;
         if(previous == NULL)
           born->firstProvince = new;
 
@@ -145,7 +151,7 @@ static pProv addProvince(char *province, int code){
 }
 
 
-void addYears(bornADT born, int year, int gender){        //FALTA SUMARLE UNO A LAS PROVINCIAS
+void addYears(bornADT born, int year, int gender){
   pDate aux = born->firstDate, previous = NULL;
   int c;
   while(aux!= NULL){
@@ -159,8 +165,9 @@ void addYears(bornADT born, int year, int gender){        //FALTA SUMARLE UNO A 
               born->allBorns+=1;
               return ;
             }
-            else if(c < 0){ //los ordeno por año: si viene aca es pq c>0
+            else if(c < 0){
               pDate new = addYear(gender, year);
+              born->sizeDates += 1;
               if(previous == NULL){
                 born->firstDate = new;
               }
@@ -176,6 +183,7 @@ void addYears(bornADT born, int year, int gender){        //FALTA SUMARLE UNO A 
 
   if(aux == NULL){
     pDate new = addYear(gender, year);
+    born->sizeDates += 1;
     if(previous == NULL){
       born->firstDate = new;
     }
@@ -208,28 +216,75 @@ int calculatePercentage(bornADT born, pProv node){
   return percentage;
 }
 
-int listProvinces(bornADT born, char *** provinces,int **bornsByProvince){
-  pProv aux = born->firstProvince;
-  int i = 0;
-  **provinces = malloc(MAX_LENGTH*sizeof(char));
+// int listProvinces(bornADT born, char *** provinces,int **bornsByProvince){
+//   pProv aux = born->firstProvince;
+//   int dimProvince = born->sizeProvinces;
+//   int dim = 0;
+//   *provinces[dimProvince] = malloc(sizeof(char)*MAX_LENGTH);              //
+//   int *borns = malloc(dimProvince*sizeof(int));
+//   //char **auxProvinces = malloc(sizeof(char)*MAX_LENGTH);
+//
+//   while(aux != NULL){
+//     strcpy(**provinces, aux->province);
+//     borns[dim] = aux->borns;
+//     dim++;
+//     aux=aux->next;
+// 	}
+//   *bornsByProvince = borns;
+//   //*provinces = auxProvinces;
+//
+//
+//   free(borns);
+// //  free(auxProvinces);
+//   return dimProvince;
+// }
 
-  int *borns = NULL;
+
+int listProvinces(bornADT born, int **bornsByProvince){
+
+  pProv aux = born->firstProvince;
+  int dimProv = born->sizeProvinces;
+  int dim = 0;
+  //**provinces = malloc(MAX_LENGTH*sizeof(char));
+
+  int *borns = malloc(dimProv*sizeof(int));
 
   while(aux != NULL){
-    if(i%DIM == 0){
-      borns= realloc(borns, (i+DIM)*sizeof(int));
-    }
-    strcpy(**provinces, aux->province);
-    borns[i] = aux->borns;
-
-    i++;
+    //strcpy(**provinces, aux->province);
+    borns[dim] = aux->borns;
+    dim++;
     aux=aux->next;
 	}
-  borns= realloc(borns, i*sizeof(int));
 
   *bornsByProvince = borns;
-  return i;
+  return dimProv;
 }
+
+
+int listYears(bornADT born, int **years, int **males, int **females){
+
+  pDate aux = born->firstDate;
+  int dimDates = born->sizeDates;
+  int dim = 0;
+  int *arrYear = malloc(dimDates*sizeof(int));
+  int *arrMales = malloc(dimDates*sizeof(int));
+  int *arrFemales = malloc(dimDates*sizeof(int));
+
+  while(aux != NULL){
+    arrYear[dim] = aux->year;
+    arrMales[dim] = aux->male;
+    arrFemales[dim] = aux->female;
+    dim++;
+    aux=aux->next;
+   }
+
+  *years = arrYear;
+  *males = arrMales;
+  *females = arrFemales;
+
+  return dim;
+}
+
 
 
 
@@ -239,7 +294,7 @@ void imprimirDate(bornADT born){            //HABRIA QUE ELIMINARLA ANTES DE ENT
     printf("year: %d; male: %d; female:%d\n", aux->year, aux->male, aux->female);
     aux = aux->next;
   }
-  printf("total: %d\n", born->allBorns);
+  printf("total: %d\nsize: %d\n", born->allBorns, born->sizeDates);
   return;
 }
 
@@ -249,5 +304,6 @@ void imprimirProvince(bornADT born){            //HABRIA QUE ELIMINARLA ANTES DE
     printf("provincia: %s; code: %d, borns: %d, porcentaje: %d\n", aux->province, aux->code, aux->borns, calculatePercentage(born, aux));
     aux = aux->next;
   }
+  printf("size: %d\n", born->sizeProvinces);
   return;
 }
