@@ -21,33 +21,26 @@ int main(int argc, char **argv){
     }
 
     bornADT born = new();//FUNCIONA CON FSANITIZE
-    FILE * f = fopen(argv[1], "r"); //abro el archivo de nacimientos que recibi como parametro con permisos de lectura
-
-    if(f == NULL){
+    FILE * fp = fopen(argv[1], "r"); //abro el archivo de nacimientos que recibi como parametro con permisos de lectura
+    FILE * fn = fopen(argv[2], "r");
+    if(fn == NULL || fp == NULL){
         printf("ERROR: File could not be opened\n"); //FUNCIONA CON FSANITIZE
-        return 1;
+        exit(1);
     }
 
-    processProvinceData(f, born);
-    fclose(f); //cuando termino de leer todas las estaciones y agregarlas, cierro el archivo
+    processProvinceData(fp, born);
+    processBornsData(fn, born);
 
-    f = fopen(argv[2], "r"); //abro el archivo de provincias    //ES NECESARIO REPETIR EL CODIGO PORQUE SOLO PUEDO ABRIR UNO POR VEZ
+    fclose(fp); //cuando termino de leer todas las estaciones y agregarlas, cierro el archivo
+    fclose(fn); //cuando termino de leer todas las provincias y agregarlas, cierro el archivo
 
-    if(f==NULL){
-        printf("ERROR: File could not be opened\n"); //FUNCIONA CON FSANITIZE
-        return 1;
-    }
-
-    processBornsData(f, born);
-    fclose(f); //cuando termino de leer todas las provincias y agregarlas, cierro el archivo
-	
     query1(born);
     query2(born);
     query3(born);
 
     freeBorn(born);
 
-    return 0;
+    return 0; 
 }
 
 void processProvinceData(FILE * province_data, bornADT b){
@@ -122,10 +115,8 @@ void processBornsData(FILE * borns_data, bornADT b){
    // imprimirDate(b);
 }
 
-//NO ESTOY SEGURA DE QUE EL ARMADO DE LOS QUERYS SE HAGA ACA, ¿¿ POR QUE LO HABIAMOS HECHO ASI EN LA ENTREGA ANTERIOR ??
 
-
-//______________________________________IDEA DE query1       NO LO PROBE CON FSANITIZE, ES UNA IDEA
+//______________________________________IDEA DE query1     
 
 void query1(bornADT born){
     FILE *fp;
@@ -153,7 +144,7 @@ void query1(bornADT born){
     return;
 }
 
-
+// QUERY 2
 void query2(bornADT born){
      FILE *fp;
      fp=fopen("query2.csv", "w");
@@ -175,24 +166,46 @@ void query2(bornADT born){
      return; 
 }
 
-// //______________________________________IDEA DE Query3       NO LO PROBE CON FSANITIZE, ES UNA IDEA
+// //______________________________________QUERY 3
 
-void query3(bornADT born){      //TENDRIAMOS QUE PONERLE CONST A ESTOS VECTORES EN CADA QUERY?
+void query3(bornADT born){      
     FILE *fp;
     fp=fopen("query3.csv", "w");
-    fprintf(fp, "Porcentaje\n");
-    int len;
-    int *percentage;
+    fprintf(fp, "Provincia;Porcentaje\n");
+    int len, *percentage; 
+    char **provinces;
 
-    int dim= orderByPercentage(born, &percentage);
+    int dim= orderByPercentage(born, &percentage, &provinces);
 
-    for(int i = 0; i < dim; i++){	
-        fprintf(fp, "%d\n", percentage[i]);
+    for(int i = 0; i < dim; i++){
+      len=strlen(provinces[i]);
+      if(len > 0)
+          provinces[i][len]='\0';    
+      fprintf(fp, "%s;%d\n", provinces[i], percentage[i]);
     }
-    
+
+    free(provinces);
     free(percentage);
 
     fclose(fp);
     return;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
