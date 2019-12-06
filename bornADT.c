@@ -41,8 +41,6 @@ static void freeDate(pDate  b);
 static pProv addProvince(char *province, int code);
 static pDate addYear(int gender, int currentYear);
 
-//static void dataForQuery2(pDate aux, int *years,long int *males, long int *females, int dimYears);
-
 
 bornADT new(void){
     bornADT new= calloc(1, sizeof(struct bornCDT));
@@ -213,53 +211,57 @@ static pDate addYear(int gender, int currentYear) {
 
 int calculatePercentage(bornADT born, pProv node){
 	int percentage = (int)(((node->borns)*100)/(born->allBorns));
-  return percentage;
+        return percentage;
 }
 
-// int listProvinces(bornADT born, char *** provinces,int **bornsByProvince){
-//   pProv aux = born->firstProvince;
-//   int dimProvince = born->sizeProvinces;
-//   int dim = 0;
-//   *provinces[dimProvince] = malloc(sizeof(char)*MAX_LENGTH);              //
-//   int *borns = malloc(dimProvince*sizeof(int));
-//   //char **auxProvinces = malloc(sizeof(char)*MAX_LENGTH);
-//
-//   while(aux != NULL){
-//     strcpy(**provinces, aux->province);
-//     borns[dim] = aux->borns;
-//     dim++;
-//     aux=aux->next;
-// 	}
-//   *bornsByProvince = borns;
-//   //*provinces = auxProvinces;
-//
-//
-//   free(borns);
-// //  free(auxProvinces);
-//   return dimProvince;
-// }
+int orderByPercentage(bornADT born, int ** percentage){
+    pProv aux = born->firstProvince;
+    int dimProv= born->sizeProvinces;
+    int dim = 0, auxPercentage = -1; 
+    int *percentages = malloc(dimProv*sizeof(int));
+
+    while (aux != NULL) {
+      percentages[dim] = calculatePercentage(born, aux);
+      dim++;
+      aux = aux->next;
+    }
+
+    for(int i=1; i<dimProv; i++){
+      for(int j=0; j<i-1;j++){
+        if(percentages[i]>percentages[j]){
+          auxPercentage = percentages[i];
+          percentages[i] = percentages [j];
+          percentages[j] = auxPercentage;
+         }
+       }
+     }
+    
+	*percentage = percentages;
+	return dim; 
+}
 
 
-int listProvinces(bornADT born, int **bornsByProvince){
+int listProvinces(bornADT born,  char ***provinces, int **bornsByProvince){
 
   pProv aux = born->firstProvince;
   int dimProv = born->sizeProvinces;
   int dim = 0;
-  //**provinces = malloc(MAX_LENGTH*sizeof(char));
-
+  char **provs;
+  provs= (char**)malloc(dimProv*sizeof(char*));
   int *borns = malloc(dimProv*sizeof(int));
 
   while(aux != NULL){
-    //strcpy(**provinces, aux->province);
+    provs[dim] = aux->province;
     borns[dim] = aux->borns;
     dim++;
     aux=aux->next;
-	}
+  }
 
+  *provinces = provs;
   *bornsByProvince = borns;
-  return dimProv;
-}
 
+  return dimProv; 
+}
 
 int listYears(bornADT born, int **years, int **males, int **females){
 
@@ -270,12 +272,12 @@ int listYears(bornADT born, int **years, int **males, int **females){
   int *arrMales = malloc(dimDates*sizeof(int));
   int *arrFemales = malloc(dimDates*sizeof(int));
 
-  while(aux != NULL){
+  while(aux != NULL){ 
     arrYear[dim] = aux->year;
     arrMales[dim] = aux->male;
     arrFemales[dim] = aux->female;
     dim++;
-    aux=aux->next;
+    aux=aux->next; 
    }
 
   *years = arrYear;
@@ -285,10 +287,8 @@ int listYears(bornADT born, int **years, int **males, int **females){
   return dim;
 }
 
-
-
-
-void imprimirDate(bornADT born){            //HABRIA QUE ELIMINARLA ANTES DE ENTREGAR EL TP
+//HABRIA QUE ELIMINARLA ANTES DE ENTREGAR EL TP
+void imprimirDate(bornADT born){          
   pDate aux = born->firstDate;
   while(aux != NULL){
     printf("year: %d; male: %d; female:%d\n", aux->year, aux->male, aux->female);
@@ -297,8 +297,8 @@ void imprimirDate(bornADT born){            //HABRIA QUE ELIMINARLA ANTES DE ENT
   printf("total: %d\nsize: %d\n", born->allBorns, born->sizeDates);
   return;
 }
-
-void imprimirProvince(bornADT born){            //HABRIA QUE ELIMINARLA ANTES DE ENTREGAR EL TP
+//HABRIA QUE ELIMINARLA ANTES DE ENTREGAR EL TP
+void imprimirProvince(bornADT born){            
   pProv aux = born->firstProvince;
   while(aux != NULL){
     printf("provincia: %s; code: %d, borns: %d, porcentaje: %d\n", aux->province, aux->code, aux->borns, calculatePercentage(born, aux));
