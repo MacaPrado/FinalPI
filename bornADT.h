@@ -24,12 +24,12 @@ void freeBorn(bornADT b);
 /* Descripción:
  * Parametros:
 */
-void addProvinces(bornADT born, char *province, int code);
+void addProvinces(bornADT born, char *province, int code, int *toReturnError);
 
 /* Descripción:
  * Parametros:
 */
-void addYears(bornADT born, int year, int gender);
+void addYears(bornADT born, int year, int gender, int *toReturnError);
 
 /* Descripción:
  * Parametros:

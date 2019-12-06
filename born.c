@@ -47,7 +47,7 @@ int main(int argc, char **argv){
 
 void processProvinceData(FILE * province_data, bornADT b){
     char buf[BLOQUE];
-    int cont=0;
+    int cont=0, toReturnError = 0;
     int numCampo, code;
     char *province=malloc(sizeof(char)*MAX_LENGTH);
     if(province == NULL){
@@ -74,7 +74,11 @@ void processProvinceData(FILE * province_data, bornADT b){
             campo = strtok(NULL, ",");
             numCampo++;
         }
-        addProvinces(b, province, code);
+        addProvinces(b, province, code, &toReturnError);
+        if(toReturnError){
+          printf("No space memory left\n");
+          return;
+        }
     }
     free(province);
     return;
@@ -82,7 +86,7 @@ void processProvinceData(FILE * province_data, bornADT b){
 
 void processBornsData(FILE * borns_data, bornADT b){
     char buf[BLOQUE];
-    int cont=0;
+    int cont=0, toReturnError = 0;
     int numCampo;
     int year, gender, provinceCode;
 
@@ -110,7 +114,11 @@ void processBornsData(FILE * borns_data, bornADT b){
             numCampo++;
         }
         addBorn(b, provinceCode);
-        addYears(b, year, gender);
+        addYears(b, year, gender, &toReturnError);
+        if(toReturnError){
+          printf("No space memory left\n");
+          return;
+        }
     }
     return;
 }
@@ -126,7 +134,7 @@ void query1(bornADT born){
     int dim= listProvinces(born, &provinces, &bornsByProvince, &error);
 
     if(error){
-      printf("No memory left\n");
+      printf("No space memory left\n");
       return ;
     }
 
@@ -153,7 +161,7 @@ void query2(bornADT born){
 	  int dim= listYears(born, &year, &male, &female, &error);
 
     if(error){
-      printf("No memory left\n");
+      printf("No space memory left\n");
       return ;
     }
     for(int i=0; i<dim; i++){
@@ -177,7 +185,7 @@ void query3(bornADT born){
 
     int dim= orderByPercentage(born, &percentage, &provinces, &error);
     if(error){
-      printf("No memory left\n");
+      printf("No space memory left\n");
       return ;
     }
 

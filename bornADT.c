@@ -35,8 +35,8 @@ static int compareInt(int c1, int c2){
 
 static void freeProvince(pProv b);
 static void freeDate(pDate  b);
-static pProv addProvince(char *province, int code);
-static pDate addYear(int gender, int currentYear);
+static pProv addProvince(char *province, int code, int *error);
+static pDate addYear(int gender, int currentYear, int *error);
 
 
 bornADT new(void){
@@ -85,13 +85,17 @@ void addBorn(bornADT born, int provinceCode){
     aux->borns += 1;
 }
 
-void addProvinces(bornADT born, char *province, int code){
+void addProvinces(bornADT born, char *province, int code, int *toReturnError){
     pProv aux = born->firstProvince, previous = NULL;
-
+    int error = 0;
     while(aux != NULL){
 
         if((strcmp (province, aux->province)) < 0){
-          pProv new = addProvince(province, code);
+          pProv new = addProvince(province, code, &error);
+          if(error){
+            *toReturnError = 1;
+            return ;
+          }
           born->sizeProvinces += 1;
           if(previous == NULL)
                 born->firstProvince = new;
@@ -106,7 +110,11 @@ void addProvinces(bornADT born, char *province, int code){
     }
 
     if(aux == NULL){
-      pProv new = addProvince(province, code);
+      pProv new = addProvince(province, code, &error);
+      if(error){
+        *toReturnError = 1;
+        return ;
+      }
       born->sizeProvinces += 1;
 
         if(previous == NULL)
@@ -119,9 +127,23 @@ void addProvinces(bornADT born, char *province, int code){
     return;
 }
 
-static pProv addProvince(char *province, int code){
+static pProv addProvince(char *province, int code, int *error){
     pProv new = malloc(sizeof(nodeProv));
+    ////////////AGREGO/////////
+    if(new == NULL){
+      *error = 1;
+      return NULL;
+    }
+    /////////////HASTA ACA///////
+
     new->province = malloc(sizeof(char)*DIM);
+    ////////////AGREGO/////////
+    if(new->province == NULL){
+      free(new);
+      *error = 1;
+      return NULL;
+    }
+    /////////////HASTA ACA///////
 
     strcpy(new->province, province);
     new->code = code;
@@ -130,9 +152,9 @@ static pProv addProvince(char *province, int code){
   return new;
 }
 
-void addYears(bornADT born, int year, int gender){
+void addYears(bornADT born, int year, int gender, int *toReturnError){
     pDate aux = born->firstDate, previous = NULL;
-    int c;
+    int c, error = 0;
     while(aux != NULL){
           if((c = compareInt(year, aux->year)) == 0){
             if(gender == 1)
@@ -145,7 +167,11 @@ void addYears(bornADT born, int year, int gender){
             return ;
           }
           else if(c < 0){
-            pDate new = addYear(gender, year);
+            pDate new = addYear(gender, year, &error);
+            if(error){
+              *toReturnError = 1;
+              return ;
+            }
             born->sizeDates += 1;
             if(previous == NULL)
                 born->firstDate = new;
@@ -160,7 +186,7 @@ void addYears(bornADT born, int year, int gender){
     }
 
     if(aux == NULL){
-      pDate new = addYear(gender, year);
+      pDate new = addYear(gender, year, &error);
       born->sizeDates += 1;
       if(previous == NULL)
         born->firstDate = new;
@@ -173,8 +199,14 @@ void addYears(bornADT born, int year, int gender){
     return ;
 }
 
-static pDate addYear(int gender, int currentYear) {
+static pDate addYear(int gender, int currentYear, int *error) {
     pDate new = malloc(sizeof(nodeDate));
+    ////////////AGREGO/////////
+    if(new == NULL){
+      *error = 1;
+      return NULL;
+    }
+    /////////////HASTA ACA///////
     new->year = currentYear;
     if(gender == 1){
       new->male = 1;
