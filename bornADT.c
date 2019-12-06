@@ -211,17 +211,21 @@ static pDate addYear(int gender, int currentYear) {
 
 int calculatePercentage(bornADT born, pProv node){
 	int percentage = (int)(((node->borns)*100)/(born->allBorns));
-        return percentage;
+  return percentage;
 }
 
-int orderByPercentage(bornADT born, int ** percentage){
+int orderByPercentage(bornADT born, int ** percentage, char *** provinces){
     pProv aux = born->firstProvince;
     int dimProv= born->sizeProvinces;
-    int dim = 0, auxPercentage = -1; 
+    int dim = 0, auxPercentage = -1;
+    char *auxProvince =NULL;
     int *percentages = malloc(dimProv*sizeof(int));
+    char **provs;
+    provs= (char**)malloc(dimProv*sizeof(char*));
 
     while (aux != NULL) {
       percentages[dim] = calculatePercentage(born, aux);
+      provs[dim] = aux->province;
       dim++;
       aux = aux->next;
     }
@@ -232,12 +236,17 @@ int orderByPercentage(bornADT born, int ** percentage){
           auxPercentage = percentages[i];
           percentages[i] = percentages [j];
           percentages[j] = auxPercentage;
-         }
-       }
-     }
-    
+
+          auxProvince = provs[i];
+          provs[i] = provs[j];
+          provs[j] = auxProvince;
+        }
+      }
+    }
+
 	*percentage = percentages;
-	return dim; 
+  *provinces = provs;
+	return dim;
 }
 
 
@@ -260,7 +269,7 @@ int listProvinces(bornADT born,  char ***provinces, int **bornsByProvince){
   *provinces = provs;
   *bornsByProvince = borns;
 
-  return dimProv; 
+  return dimProv;
 }
 
 int listYears(bornADT born, int **years, int **males, int **females){
@@ -272,12 +281,12 @@ int listYears(bornADT born, int **years, int **males, int **females){
   int *arrMales = malloc(dimDates*sizeof(int));
   int *arrFemales = malloc(dimDates*sizeof(int));
 
-  while(aux != NULL){ 
+  while(aux != NULL){
     arrYear[dim] = aux->year;
     arrMales[dim] = aux->male;
     arrFemales[dim] = aux->female;
     dim++;
-    aux=aux->next; 
+    aux=aux->next;
    }
 
   *years = arrYear;
@@ -288,7 +297,7 @@ int listYears(bornADT born, int **years, int **males, int **females){
 }
 
 //HABRIA QUE ELIMINARLA ANTES DE ENTREGAR EL TP
-void imprimirDate(bornADT born){          
+void imprimirDate(bornADT born){
   pDate aux = born->firstDate;
   while(aux != NULL){
     printf("year: %d; male: %d; female:%d\n", aux->year, aux->male, aux->female);
@@ -298,7 +307,7 @@ void imprimirDate(bornADT born){
   return;
 }
 //HABRIA QUE ELIMINARLA ANTES DE ENTREGAR EL TP
-void imprimirProvince(bornADT born){            
+void imprimirProvince(bornADT born){
   pProv aux = born->firstProvince;
   while(aux != NULL){
     printf("provincia: %s; code: %d, borns: %d, porcentaje: %d\n", aux->province, aux->code, aux->borns, calculatePercentage(born, aux));

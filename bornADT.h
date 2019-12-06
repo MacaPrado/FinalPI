@@ -30,10 +30,10 @@ void addBorn(bornADT born, int provinceCode);
 
 int calculatePercentage(bornADT born, pProv node);
 
-int orderByPercentage(bornADT born, int ** percentage);
+int orderByPercentage(bornADT born, int ** percentage, char *** provinces);
 
 int listProvinces(bornADT born, char ***provinces, int **bornsByProvince);
 
-int listYears(bornADT born, int **years, int **males, int **females); 
+int listYears(bornADT born, int **years, int **males, int **females);
 
 #endif
