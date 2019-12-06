@@ -4,7 +4,8 @@
 #include "bornADT.h"
 
 #define BLOQUE 400
-#define MAX_LENGTH 5000
+#define MAX_LENGTH 100
+
 
 void processProvinceData(FILE * province_data, bornADT b);
 void processBornsData(FILE * borns_data, bornADT b);
@@ -15,59 +16,62 @@ void query3(bornADT born);
 
 int main(int argc, char **argv){
 
-    if(argc != 3){ //me aseguro de recibir los archivos en la línea de comandos, el primer argumento siempre es el programa en si.
-        printf("ERROR: Incorrect number of parameters. Files nacimientos.csv and provincias.csv are expected as parameters.\n"); //FUNCIONA CON FSANITIZE
+    if(argc != 3){
+        printf("ERROR: Incorrect number of parameters. Files nacimientos.csv and provincias.csv are expected as parameters.\n");
         return 1;
     }
 
-    bornADT born = new();//FUNCIONA CON FSANITIZE
-    FILE * fp = fopen(argv[1], "r"); //abro el archivo de nacimientos que recibi como parametro con permisos de lectura
+    bornADT born = new();
+    FILE * fp = fopen(argv[1], "r");
     FILE * fn = fopen(argv[2], "r");
     if(fn == NULL || fp == NULL){
-        printf("ERROR: File could not be opened\n"); //FUNCIONA CON FSANITIZE
-        exit(1);
+        printf("ERROR: File could not be opened\n");
+        return 1;
     }
+    printf("\n----------------------TRABAJO FINAL PI----------------------\n");
+    printf("--------Conca, Maria | Limachi, Desiree | Prado, Macarena-------\n");
 
     processProvinceData(fp, born);
     processBornsData(fn, born);
 
-    fclose(fp); //cuando termino de leer todas las estaciones y agregarlas, cierro el archivo
-    fclose(fn); //cuando termino de leer todas las provincias y agregarlas, cierro el archivo
+    fclose(fp);
+    fclose(fn);
 
     query1(born);
     query2(born);
     query3(born);
 
     freeBorn(born);
-
-    return 0; 
+    return 0;
 }
 
 void processProvinceData(FILE * province_data, bornADT b){
-    char buf[BLOQUE]; //defino un vector de chars para poder usar en fgets
+    char buf[BLOQUE];
     int cont=0;
-    int numCampo;
-    int code;
+    int numCampo, code;
     char *province=malloc(sizeof(char)*MAX_LENGTH);
+    if(province == NULL){
+      printf("\n");
+      return;
+    }
 
     while(fgets(buf, BLOQUE, province_data)){
         numCampo=0;
         cont++;
 
         if(cont==1)
-            continue; //me salteo el header
-        char * campo = strtok(buf, ","); //empiezo a recorrer la linea del CSV
+            continue;
+        char * campo = strtok(buf, ",");
         while(campo){
 
-            if(numCampo == 0){  //recibo el dato de la columna CODIGO
+            if(numCampo == 0){
                 sscanf(campo, "%d", &code);
             }
-
-            if(numCampo == 1){ //recibo el dato de la columna VALOR
-      		    strcpy(province, campo);//estoy copiando el nombre de la provincia
+            if(numCampo == 1){
+      		    strcpy(province, campo);
             }
 
-            campo = strtok(NULL, ","); //avanzo de campo
+            campo = strtok(NULL, ",");
             numCampo++;
         }
         addProvinces(b, province, code);
@@ -77,7 +81,7 @@ void processProvinceData(FILE * province_data, bornADT b){
 }
 
 void processBornsData(FILE * borns_data, bornADT b){
-  char buf[BLOQUE]; //defino un vector de chars para poder usar en fgets
+    char buf[BLOQUE];
     int cont=0;
     int numCampo;
     int year, gender, provinceCode;
@@ -87,56 +91,52 @@ void processBornsData(FILE * borns_data, bornADT b){
         cont++;
 
         if(cont==1)
-            continue; //me salteo el header
-        char * campo = strtok(buf, ","); //empiezo a recorrer la linea del CSV
+            continue;
+        char * campo = strtok(buf, ",");
+
         while(campo){
 
-            if(numCampo == 0){		//recibo el dato de la columna AN
+            if(numCampo == 0){
                 sscanf(campo, "%d", &year);
             }
-
-            if(numCampo == 1){ //recibo el dato de la columna PROVRES
+            if(numCampo == 1){
                 sscanf(campo, "%d", &provinceCode);
             }
-
-	    if(numCampo == 3){ //recibo el dato de la columna SEXO
+	          if(numCampo == 3){
                 sscanf(campo, "%d", &gender);
             }
 
-            campo = strtok(NULL, ","); //avanzo de campo
+            campo = strtok(NULL, ",");
             numCampo++;
         }
         addBorn(b, provinceCode);
         addYears(b, year, gender);
-
     }
-    //imprimirProvince(b);
-
-   // imprimirDate(b);
+    return;
 }
 
-
-//______________________________________IDEA DE query1     
-
 void query1(bornADT born){
-    FILE *fp;
-    fp=fopen("query1.csv", "w");             //ASI SE CREA EL ARCHIVO
-    fprintf(fp, "Provincias;Nacimientos\n");    //SI YA LOS ORDENAMOS ALFABETICAMENTE, ESE CODIGO PUEDE SER REUTILIZADO EN EL QUERY3 (QUE PIDE ORDEN POR PORCENTAJE Y ALFABETICO)
+    FILE *fp=fopen("query1.csv", "w");
+    fprintf(fp, "Provincias;Nacimientos\n");
 
-    int len;
+    int len, error= 0;
     char **provinces;
     int *bornsByProvince;
 
-    int dim= listProvinces(born, &provinces, &bornsByProvince);
+    int dim= listProvinces(born, &provinces, &bornsByProvince, &error);
+
+    if(error){
+      printf("No memory left\n");
+      return ;
+    }
 
     for(int i = 0; i < dim; i++){
-	len=strlen(provinces[i]);
-	if(len > 0)
-		provinces[i][len-2]='\0';	
-        fprintf(fp, "%s;%d\n",provinces[i], bornsByProvince[i]);
-
+	     len=strlen(provinces[i]);
+	     if(len > 0)
+		        provinces[i][len-2]='\0';
+       fprintf(fp, "%s;%d\n",provinces[i], bornsByProvince[i]);
     }
-    
+
     free(provinces);
     free(bornsByProvince);
     fclose(fp);
@@ -144,43 +144,47 @@ void query1(bornADT born){
     return;
 }
 
-// QUERY 2
 void query2(bornADT born){
-     FILE *fp;
-     fp=fopen("query2.csv", "w");
-     fprintf(fp, "Año;Varón;Mujer\n");
+    FILE *fp=fopen("query2.csv", "w");
+    fprintf(fp, "Año;Varón;Mujer\n");
+    int error = 0;
+	  int *year, *male, *female;
 
-	int *year, *male, *female;
+	  int dim= listYears(born, &year, &male, &female, &error);
 
-	int dim= listYears(born, &year, &male, &female);
-
-     for(int i=0; i<dim; i++){
+    if(error){
+      printf("No memory left\n");
+      return ;
+    }
+    for(int i=0; i<dim; i++){
          fprintf(fp, "%d;%d;%d\n", year[i], male[i], female[i]);
-     }
+    }
 
-	free(year);
-	free(female);
-	free(male);
+	  free(year);
+	  free(female);
+	  free(male);
 
-     fclose(fp);
-     return; 
+    fclose(fp);
+    return;
 }
 
-// //______________________________________QUERY 3
-
-void query3(bornADT born){      
-    FILE *fp;
-    fp=fopen("query3.csv", "w");
+void query3(bornADT born){
+    FILE *fp=fopen("query3.csv", "w");
     fprintf(fp, "Provincia;Porcentaje\n");
-    int len, *percentage; 
+    int len, error = 0;
+    int *percentage;
     char **provinces;
 
-    int dim= orderByPercentage(born, &percentage, &provinces);
+    int dim= orderByPercentage(born, &percentage, &provinces, &error);
+    if(error){
+      printf("No memory left\n");
+      return ;
+    }
 
     for(int i = 0; i < dim; i++){
       len=strlen(provinces[i]);
       if(len > 0)
-          provinces[i][len]='\0';    
+          provinces[i][len]='\0';
       fprintf(fp, "%s;%d\n", provinces[i], percentage[i]);
     }
 
@@ -190,22 +194,3 @@ void query3(bornADT born){
     fclose(fp);
     return;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
