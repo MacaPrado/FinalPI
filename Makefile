@@ -1,14 +1,8 @@
 COMPILER=gcc
-OUTPUT_FILE= TPFinal
+OUTPUT_FILE=FinalPI
 
-all: compile
-	rm -r *.o *.h.gch
-
-compile: ADT.o 
-	$(COMPILER) -pedantic -std=c99 -Wall -fsanitize=address -o $(OUTPUT_FILE) main.c ADT.o
-
-ADT.o: bornADT.c 
-	$(COMPILER) -c bornADT.c
+all: bornADT.c
+	$(COMPILER) -Wall -pedantic -std=c99 -fsanitize=address -o $(OUTPUT_FILE) born.c bornADT.c
 
 clean:
 	rm -r $(OUTPUT_FILE) *.o
