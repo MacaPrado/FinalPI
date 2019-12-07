@@ -1,6 +1,6 @@
 ﻿TRABAJO FINAL PROGRAMACIÓN IMPERATIVA 	        
 
-Integrantes:	Conca, Maria 
+Integrantes:	Conca, Maria Victoria
 		Limachi, Desiree
 		Prado, Macarena				        
 
@@ -20,7 +20,7 @@ Donde *file1* y *file2* representan el PATH de los archivos .csv de los cuales s
 
 Los archivos seran "provincias.csv", "nacimientos.csv" :
 	
-   $> ./TPFinal aeropuertos.csv movimientos.csv
+   $> ./TPFinal provincias.csv nacimientos.csv
 
 
 >> Errores:
@@ -34,7 +34,7 @@ Los archivos seran "provincias.csv", "nacimientos.csv" :
 
 Una vez ejecutado correctamente el programa se crearan 3 archivos .csv correspondiente a cada query:
 
-Query1: 	Cantidad de nacimientos por provincia, ordenados de forma alfabetico por provicias.
-Query2: 	Cantidad de nacimientos por genero durante un año, ordenados de forma ascendente por año.
-Query3:	Porcentaje de nacimientos por provincia, ordenados de forma descendente por porcentaje(truncado). 
+Query1: Cantidad de nacimientos por provincia, ordenados de forma alfabetico por provicias.
+Query2: Cantidad de nacimientos por genero durante cada año, ordenados de forma ascendente por año.
+Query3:	Porcentaje de nacimientos por provincia, ordenados de forma descendente por porcentaje, el cual se encuentra truncado. 
     
