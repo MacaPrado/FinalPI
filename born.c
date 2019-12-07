@@ -77,7 +77,7 @@ void processProvinceData(FILE * province_data, bornADT b){
         }
         addProvinces(b, province, code, &toReturnError);  //Envía el código y el nombre de la provincia para agregarlos a la lista en el TAD
         if(toReturnError){
-          printf("No space memory left\n");
+          printf("ERROR: No space memory left\n");
           return;
         }
     }
@@ -117,7 +117,7 @@ void processBornsData(FILE * borns_data, bornADT b){
         addBorn(b, provinceCode);  //Envía el código de la provincia para agregar un nacido a la provincia en la lista en el TAD
         addYears(b, year, gender, &toReturnError);  //Envía el año y género del nacido para agregarlos a la lista en el TAD
         if(toReturnError){
-          printf("No space memory left\n");
+          printf("ERROR: No space memory left\n");
           return;
         }
     }
@@ -135,7 +135,7 @@ void query1(bornADT born){
     int dim= listProvinces(born, &provinces, &bornsByProvince, &error);
 
     if(error){
-      printf("No space memory left\n");
+      printf("ERROR: No space memory left\n");
       return ;
     }
 
@@ -162,7 +162,7 @@ void query2(bornADT born){
 	  int dim= listYears(born, &year, &male, &female, &error);
 
     if(error){
-      printf("No space memory left\n");
+      printf("ERROR: No space memory left\n");
       return ;
     }
     for(int i=0; i<dim; i++){
@@ -186,7 +186,7 @@ void query3(bornADT born){
 
     int dim= orderByPercentage(born, &percentage, &provinces, &error);
     if(error){
-      printf("No space memory left\n");
+      printf("ERROR: No space memory left\n");
       return ;
     }
 
