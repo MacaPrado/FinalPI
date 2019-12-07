@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <string.h>
 #include "bornADT.h"
 
@@ -31,25 +30,25 @@ struct bornCDT{
 
 
 /* Descripción: libera todas las provincias de la lista
- * Parametros de entrada: puntero al nodo provincia
+ * Parámetros de entrada: puntero al nodo provincia
 */
 static void freeProvince(pProv b);
 
 /* Descripción: libera todos los años de la lista
- * Parametros de entrada: puntero al nodo Date
+ * Parámetros de entrada: puntero al nodo Date
 */
 static void freeDate(pDate  b);
 
-/* Descripción:  crea un nuevo nodo Provincia
- * Parametros de entrada:  vector de la provincia, codigo de la provincia
- * Parametros de salida: flag del error
+/* Descripción: crea un nuevo nodo Provincia
+ * Parámetros de entrada: vector de la provincia, código de la provincia
+ * Parámetros de salida: flag de error
  * Retorna: el puntero al nuevo nodo si es que se pudo crear
 */
 static pProv addProvince(char *province, int code, int *error);
 
-/* Descripción:   crea un nuevo nodo Date
- * Parametros de entrada:    genero, año
- * Parametros de salida: flag del error
+/* Descripción: crea un nuevo nodo Date
+ * Parámetros de entrada: género, año
+ * Parámetros de salida: flag de error
  * Retorna: el puntero al nuevo nodo si es que se pudo crear
 */
 static pDate addYear(int gender, int year, int *error);
@@ -60,9 +59,6 @@ bornADT new(void){
     return new;
 }
 
-int isEmpty(const bornADT b){
-    return b->allBorns == 0;
-}
 
 void freeBorn(bornADT b){
     freeProvince(b->firstProvince);

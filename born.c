@@ -16,105 +16,106 @@ void query3(bornADT born);
 
 int main(int argc, char **argv){
 
-    if(argc != 3){
+    if(argc != 3){  //Se asegura de recibir la cantidad de archivos correcta
         printf("ERROR: Incorrect number of parameters. Files nacimientos.csv and provincias.csv are expected as parameters.\n");
         return 1;
     }
 
     bornADT born = new();
-    FILE * fp = fopen(argv[1], "r");
-    FILE * fn = fopen(argv[2], "r");
+    FILE * fp = fopen(argv[1], "r");  //Abre el archivo que correspondería a provincias.csv, con permiso de lectura
+    FILE * fn = fopen(argv[2], "r");  //Abre el archivo que correspondería a nacimientos.csv, con permiso de lectura
     if(fn == NULL || fp == NULL){
         printf("ERROR: File could not be opened\n");
         return 1;
     }
-    printf("\n----------------------TRABAJO FINAL PI----------------------\n");
-    printf("--------Conca, Maria | Limachi, Desiree | Prado, Macarena-------\n");
+    printf("\n----------------------------TRABAJO FINAL PI----------------------------\n");
+    printf("--------Conca, Maria | Limachi, Desiree | Prado Torres, Macarena--------\n");
+    printf("------------------------------------------------------------------------\n\n");
 
-    processProvinceData(fp, born);
-    processBornsData(fn, born);
+    processProvinceData(fp, born);  //Obtiene los datos necesarios del archivo provincias.csv y los analiza en el TAD
+    processBornsData(fn, born);  //Obtiene los datos necesarios del archivo provincias.csv y los analiza en el TAD
 
-    fclose(fp);
+    fclose(fp); //Cierra los archivos
     fclose(fn);
 
-    query1(born);
+    query1(born); //Llama a las funciones Query
     query2(born);
     query3(born);
 
-    freeBorn(born);
+    freeBorn(born); //Libera el espacio almacenado
     return 0;
 }
 
 void processProvinceData(FILE * province_data, bornADT b){
-    char buf[BLOQUE];
-    int cont=0, toReturnError = 0;
-    int numCampo, code;
+    char str[BLOQUE];
+    int count=0, toReturnError = 0;
+    int field, code;
     char *province=malloc(sizeof(char)*MAX_LENGTH);
     if(province == NULL){
       printf("\n");
       return;
     }
 
-    while(fgets(buf, BLOQUE, province_data)){
-        numCampo=0;
-        cont++;
+    while(fgets(str, BLOQUE, province_data)){
+        field=0;
+        count++;
 
-        if(cont==1)
+        if(count==1) //Saltea el título de las columnas
             continue;
-        char * campo = strtok(buf, ",");
-        while(campo){
+        char * token = strtok(str, ",");  //Empieza a recorrer la primer línea de provincias.csv
+        while(token){
 
-            if(numCampo == 0){
-                sscanf(campo, "%d", &code);
+            if(field == 0){
+                sscanf(token, "%d", &code); //Guarda el código de la provincia
             }
-            if(numCampo == 1){
-      		    strcpy(province, campo);
+            if(field == 1){
+      		    strcpy(province, token);  //Guarda el nombre de la provincia
             }
 
-            campo = strtok(NULL, ",");
-            numCampo++;
+            token = strtok(NULL, ",");  //Avanza a la siguiente línea
+            field++;
         }
-        addProvinces(b, province, code, &toReturnError);
+        addProvinces(b, province, code, &toReturnError);  //Envía el código y el nombre de la provincia para agregarlos a la lista en el TAD
         if(toReturnError){
           printf("No space memory left\n");
           return;
         }
     }
-    free(province);
+    free(province); //Libera el espacio almacenado
     return;
 }
 
 void processBornsData(FILE * borns_data, bornADT b){
-    char buf[BLOQUE];
-    int cont=0, toReturnError = 0;
-    int numCampo;
+    char str[BLOQUE];
+    int count=0, toReturnError = 0;
+    int field;
     int year, gender, provinceCode;
 
-    while(fgets(buf, BLOQUE, borns_data)){
-        numCampo=0;
-        cont++;
+    while(fgets(str, BLOQUE, borns_data)){
+        field=0;
+        count++;
 
-        if(cont==1)
+        if(count==1)  //Saltea el título de las columnas
             continue;
-        char * campo = strtok(buf, ",");
+        char * token = strtok(str, ",");  //Empieza a recorrer la primer línea de nacimientos.csv
 
-        while(campo){
+        while(token){
 
-            if(numCampo == 0){
-                sscanf(campo, "%d", &year);
+            if(field == 0){
+                sscanf(token, "%d", &year); //Guarda el año de nacimiento
             }
-            if(numCampo == 1){
-                sscanf(campo, "%d", &provinceCode);
+            if(field == 1){
+                sscanf(token, "%d", &provinceCode); //Guarda el código de la provincia del nacido
             }
-	          if(numCampo == 3){
-                sscanf(campo, "%d", &gender);
+	          if(field == 3){
+                sscanf(token, "%d", &gender); //Guarda el género del nacido
             }
 
-            campo = strtok(NULL, ",");
-            numCampo++;
+            token = strtok(NULL, ",");  //Avanza a la siguiente línea
+            field++;
         }
-        addBorn(b, provinceCode);
-        addYears(b, year, gender, &toReturnError);
+        addBorn(b, provinceCode);  //Envía el código de la provincia para agregar un nacido a la provincia en la lista en el TAD
+        addYears(b, year, gender, &toReturnError);  //Envía el año y género del nacido para agregarlos a la lista en el TAD
         if(toReturnError){
           printf("No space memory left\n");
           return;
@@ -193,7 +194,7 @@ void query3(bornADT born){
       len=strlen(provinces[i]);
       if(len > 0)
           provinces[i][len]='\0';
-      fprintf(fp, "%s;%d\n", provinces[i], percentage[i]);
+      fprintf(fp, "%s;%d%%\n", provinces[i], percentage[i]);
     }
 
     free(provinces);
