@@ -5,7 +5,7 @@ Integrantes:	Conca, Maria Victoria
 		Prado Torres, Macarena				        
 
 
-1- Una vez posicionado en el directorio en el que se encuentran los archivos fuente y de encabezado entregados utilizar el siguiente comando para generar el ejecutable "TPFinal":
+1- Una vez posicionado en el directorio en el que se encuentran los archivos fuente y de encabezado entregados utilizar el siguiente comando para generar el ejecutable "TPEFinal":
 
    $> make
 
@@ -14,13 +14,13 @@ Integrantes:	Conca, Maria Victoria
 
 1- Ejecutar el siguiente comando en consola:
 
-   $> ./TPFinal *file1* *file2*
+   $> ./TPEFinal *file1* *file2*
 
 Donde *file1* y *file2* representan el PATH de los archivos .csv de los cuales serán extraídos los datos.
 
 Los archivos serán "provincias.csv", "nacimientos.csv" :
 	
-   $> ./TPFinal provincias.csv nacimientos.csv
+   $> ./TPEFinal provincias.csv nacimientos.csv
 
 
 >> Errores:
@@ -34,7 +34,7 @@ Los archivos serán "provincias.csv", "nacimientos.csv" :
 
 Una vez ejecutado correctamente el programa se crearán 3 archivos .csv correspondientes a cada query:
 
-Query1: Cantidad de nacimientos por provincia, ordenados de forma alfabética por provicias.
+Query1: Cantidad de nacimientos por provincia, ordenados de forma alfabética por provincias.
 Query2: Cantidad de nacimientos por género durante cada año, ordenados de forma ascendente por año.
 Query3:	Porcentaje de nacimientos por provincia, ordenados de forma descendente por porcentaje, el cual se encuentra truncado. 
     
